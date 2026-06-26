@@ -317,6 +317,62 @@
         /* Extras list */
         .extras-list { display: flex; flex-direction: column; }
 
+        .extra-settings-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .extra-settings-row:last-child { border-bottom: none; }
+
+        .extra-name-input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            border: 1px solid var(--color-divider);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .extra-price-input { width: 72px; flex-shrink: 0; }
+
+        .extra-price-unit {
+            color: var(--color-text-muted);
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .extra-remove-btn {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            border: 1px solid var(--color-divider);
+            border-radius: var(--radius-sm);
+            background: var(--color-surface);
+            color: var(--color-text-muted);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-add-extra {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px 16px;
+            border: 1px dashed var(--color-divider);
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--color-primary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
         .checkbox-container {
             display: flex;
             align-items: center;
@@ -529,6 +585,12 @@
         }
 
         .settings-header p { font-size: 13px; color: var(--color-text-muted); }
+
+        .settings-hint {
+            font-size: 13px;
+            color: var(--color-text-muted);
+            margin: 0 0 12px;
+        }
 
         .settings-subtitle {
             margin: 14px 0 10px;
@@ -796,11 +858,9 @@
         <div class="bento-card">
             <div class="bento-card-body section">
             <div class="section-title">Extras</div>
-            <div class="price-simple-grid">
-                <div><label>Protector Solar:</label><input type="number" id="p-protector" value="115" class="price-input"><span>BRL</span></div>
-                <div><label>Lycras:</label><input type="number" id="p-lycras" value="180" class="price-input"><span>BRL</span></div>
-                <div><label>Cuipe:</label><input type="number" id="p-cuipe" value="80" class="price-input"><span>BRL</span></div>
-            </div>
+            <p class="settings-hint">Nombre + precio. Aparecen como checkboxes en cada cotización.</p>
+            <div id="extrasSettingsList"></div>
+            <button type="button" class="btn-add-extra" id="addExtraBtn">+ Agregar extra</button>
             </div>
         </div>
 
@@ -822,7 +882,7 @@
 </div>
 
 <script>
-const PRECIO_VERSION = 2;
+const PRECIO_VERSION = 3;
 
 const preciosDefault = {
   version: PRECIO_VERSION,
@@ -863,11 +923,100 @@ const preciosDefault = {
       }
     }
   },
-  extras: {protectorSolar:115, lycras:180, cuipe:80}
+  extras: [
+    {id:'ext-1', name:'Protector Solar', price:115},
+    {id:'ext-2', name:'Lycras', price:180},
+    {id:'ext-3', name:'Tarde en Cuipe', price:80}
+  ]
 };
 
 let precios = JSON.parse(JSON.stringify(preciosDefault));
-let optionCounter = 0, currentLanguage = 'pt';
+let optionCounter = 0, currentLanguage = 'pt', extraIdCounter = 3;
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+}
+
+function escAttr(s) {
+  return escHtml(s);
+}
+
+function initExtraIdCounter() {
+  (precios.extras || []).forEach(e => {
+    const m = String(e.id || '').match(/^ext-(\d+)$/);
+    if (m) extraIdCounter = Math.max(extraIdCounter, parseInt(m[1], 10));
+  });
+}
+
+function generarExtraId() {
+  return 'ext-' + (++extraIdCounter);
+}
+
+function normalizarExtrasArray(arr) {
+  if (!Array.isArray(arr)) return JSON.parse(JSON.stringify(preciosDefault.extras));
+  return arr
+    .filter(e => e && String(e.name || '').trim())
+    .map((e, i) => ({
+      id: e.id || `ext-${i + 1}`,
+      name: String(e.name).trim(),
+      price: parseInt(e.price, 10) || 0
+    }));
+}
+
+function migrarExtrasDesdeV2(old) {
+  if (Array.isArray(old)) return normalizarExtrasArray(old);
+  return [
+    {id:'ext-1', name:'Protector Solar', price: old?.protectorSolar ?? 115},
+    {id:'ext-2', name:'Lycras', price: old?.lycras ?? 180},
+    {id:'ext-3', name:'Tarde en Cuipe', price: old?.cuipe ?? 80}
+  ];
+}
+
+function buildExtrasCheckboxHtml(optionId, selectedIds) {
+  const sel = selectedIds || new Set();
+  const list = precios.extras || [];
+  if (list.length === 0) {
+    return '<p class="info-text" style="margin:0;font-size:13px;color:var(--color-text-muted)">Configura extras en Precios</p>';
+  }
+  return list.map(e => {
+    const checked = sel.has(e.id) ? ' checked' : '';
+    return `<div class="checkbox-container"><input type="checkbox" id="extra-${optionId}-${escAttr(e.id)}" value="${escAttr(e.id)}"${checked}><label for="extra-${optionId}-${escAttr(e.id)}">${escHtml(e.name)} (R$ ${e.price})</label></div>`;
+  }).join('');
+}
+
+function crearFilaExtraSettings(extra) {
+  const row = document.createElement('div');
+  row.className = 'extra-settings-row';
+  const id = extra?.id || generarExtraId();
+  row.dataset.extraId = id;
+  row.innerHTML = `
+    <input type="text" class="extra-name-input" placeholder="Nombre" value="${extra ? escAttr(extra.name) : ''}">
+    <input type="number" class="extra-price-input price-input" min="0" value="${extra ? extra.price : ''}">
+    <span class="extra-price-unit">BRL</span>
+    <button type="button" class="extra-remove-btn" aria-label="Eliminar">×</button>
+  `;
+  row.querySelector('.extra-remove-btn').addEventListener('click', () => row.remove());
+  return row;
+}
+
+function renderExtrasSettings() {
+  const list = document.getElementById('extrasSettingsList');
+  if (!list) return;
+  list.innerHTML = '';
+  (precios.extras || []).forEach(extra => list.appendChild(crearFilaExtraSettings(extra)));
+}
+
+function leerExtrasDesdeSettings() {
+  const rows = document.querySelectorAll('#extrasSettingsList .extra-settings-row');
+  const extras = [];
+  rows.forEach(row => {
+    const name = row.querySelector('.extra-name-input')?.value?.trim();
+    const price = parseInt(row.querySelector('.extra-price-input')?.value, 10) || 0;
+    const id = row.dataset.extraId || generarExtraId();
+    if (name) extras.push({id, name, price});
+  });
+  return extras;
+}
 
 // ── Cálculos ──────────────────────────────────────────────────────────────────
 
@@ -963,14 +1112,16 @@ function calcularRental(d, cfg) {
   return {items, total, descripcion:`Rental ${deporteRental} ${tiposTxt} ${durTxt} ×${diasRental}d`};
 }
 
-function calcularExtras(d, cfg) {
-  const {protectorSolar, lycras, cuipe} = d;
-  const e = cfg.extras;
+function calcularExtras(selectedIds, cfg) {
   const items = [];
   let total = 0;
-  if (protectorSolar) {items.push({label:'Protector Solar',qty:1,unit:'un',unitPrice:e.protectorSolar,subtotal:e.protectorSolar,isPerPerson:true});total+=e.protectorSolar;}
-  if (lycras) {items.push({label:'Lycras',qty:1,unit:'un',unitPrice:e.lycras,subtotal:e.lycras,isPerPerson:true});total+=e.lycras;}
-  if (cuipe) {items.push({label:'Tarde en Cuipe',qty:1,unit:'un',unitPrice:e.cuipe,subtotal:e.cuipe,isPerPerson:true});total+=e.cuipe;}
+  const catalog = cfg.extras || [];
+  catalog.forEach(extra => {
+    if (selectedIds.includes(extra.id)) {
+      items.push({label:extra.name, qty:1, unit:'un', unitPrice:extra.price, subtotal:extra.price, isPerPerson:true});
+      total += extra.price;
+    }
+  });
   return {items, total};
 }
 
@@ -978,12 +1129,17 @@ function calcularExtras(d, cfg) {
 
 window.addEventListener('DOMContentLoaded', function() {
   cargarPreciosGuardados();
+  initExtraIdCounter();
+  renderExtrasSettings();
   crearPrimeraOpcion();
   document.getElementById('addOptionBtn').addEventListener('click', agregarOpcion);
   document.getElementById('generarBtn').addEventListener('click', generarComparacion);
   document.getElementById('copiarBtn').addEventListener('click', copiarMensaje);
   document.getElementById('guardarPreciosBtn').addEventListener('click', guardarPrecios);
   document.getElementById('resetPreciosBtn').addEventListener('click', resetearPrecios);
+  document.getElementById('addExtraBtn').addEventListener('click', function() {
+    document.getElementById('extrasSettingsList').appendChild(crearFilaExtraSettings());
+  });
   document.querySelectorAll('.language-tab').forEach(t=>t.addEventListener('click',function(){cambiarIdioma(this.getAttribute('data-lang'));}));
   document.querySelectorAll('.main-tab').forEach(t=>t.addEventListener('click',function(){cambiarModo(this.getAttribute('data-mode'),this);}));
 });
@@ -997,18 +1153,20 @@ function cambiarModo(modo, el) {
   document.getElementById('stickyBar').classList.toggle('hidden', !isCot);
   document.getElementById('resultadoComparador').classList.add('hidden');
   if (!isCot) sincronizarInputsPrecios();
-  else actualizarLabelsExtras();
+  else refrescarExtrasEnOpciones();
 }
 
-function actualizarLabelsExtras() {
+function refrescarExtrasEnOpciones() {
   document.querySelectorAll('.option-content').forEach(c => {
     const id = c.id.split('-')[1];
-    const lp = document.getElementById(`label-prot-${id}`);
-    const ll = document.getElementById(`label-lyc-${id}`);
-    const lc = document.getElementById(`label-cuipe-${id}`);
-    if (lp) lp.textContent = `Protector Solar (R$ ${precios.extras.protectorSolar})`;
-    if (ll) ll.textContent = `Lycras (R$ ${precios.extras.lycras})`;
-    if (lc) lc.textContent = `Tarde en Cuipe (R$ ${precios.extras.cuipe})`;
+    const selected = new Set();
+    c.querySelectorAll(`#extras-list-${id} input:checked`).forEach(cb => selected.add(cb.value));
+    const container = document.getElementById(`extras-list-${id}`);
+    if (!container) return;
+    container.innerHTML = buildExtrasCheckboxHtml(id, selected);
+    container.querySelectorAll('input').forEach(el => {
+      el.addEventListener('change', () => actualizarPreview(id));
+    });
   });
 }
 
@@ -1176,10 +1334,8 @@ function crearContenidoOpcion(id) {
       </div>
       <div class="form-section">
         <div class="section-title">Extras</div>
-        <div class="extras-list">
-          <div class="checkbox-container"><input type="checkbox" id="prot-${id}"><label for="prot-${id}" id="label-prot-${id}">Protector Solar (R$ ${precios.extras.protectorSolar})</label></div>
-          <div class="checkbox-container"><input type="checkbox" id="lyc-${id}"><label for="lyc-${id}" id="label-lyc-${id}">Lycras (R$ ${precios.extras.lycras})</label></div>
-          <div class="checkbox-container"><input type="checkbox" id="cuipe-${id}"><label for="cuipe-${id}" id="label-cuipe-${id}">Tarde en Cuipe (R$ ${precios.extras.cuipe})</label></div>
+        <div class="extras-list" id="extras-list-${id}">
+          ${buildExtrasCheckboxHtml(id)}
         </div>
       </div>
     </div>
@@ -1311,14 +1467,13 @@ function obtenerDatosOpcion(id) {
     if (document.getElementById(`rw-foil-${id}`)?.checked) rentalItems.push('tablaFoil');
   }
 
-  const protectorSolar = document.getElementById(`prot-${id}`)?.checked || false;
-  const lycras = document.getElementById(`lyc-${id}`)?.checked || false;
-  const cuipe  = document.getElementById(`cuipe-${id}`)?.checked || false;
+  const extrasSelected = [];
+  document.querySelectorAll(`#extras-list-${id} input:checked`).forEach(cb => extrasSelected.push(cb.value));
 
   const rH = calcularHospedaje({temporada,habitacion,noches,personas,desayuno}, precios);
   const rC = calcularClases({quiereClases,deporte,productoClase,horasClase,temporada,tieneHospedaje}, precios);
   const rR = calcularRental({quiereRental,deporteRental,duracionRental,diasRental,rentalItems}, precios);
-  const rE = calcularExtras({protectorSolar,lycras,cuipe}, precios);
+  const rE = calcularExtras(extrasSelected, precios);
 
   const grandTotal = rH.total + rC.total + rR.total + rE.total;
   const descuentoPago = formaPago === 'efectivo' ? Math.round(grandTotal * 0.1) : 0;
@@ -1532,9 +1687,7 @@ function sincronizarInputsPrecios() {
   document.getElementById('p-rw-wing-d').value = rw.soloWing.dia;
   document.getElementById('p-rw-foil-h').value = rw.tablaFoil.hora;
   document.getElementById('p-rw-foil-d').value = rw.tablaFoil.dia;
-  document.getElementById('p-protector').value = precios.extras.protectorSolar;
-  document.getElementById('p-lycras').value = precios.extras.lycras;
-  document.getElementById('p-cuipe').value = precios.extras.cuipe;
+  renderExtrasSettings();
 }
 
 function leerInt(id) { return parseInt(document.getElementById(id)?.value) || 0; }
@@ -1580,11 +1733,11 @@ function guardarPrecios() {
   rw.completo.hora = leerInt('p-rw-comp-h'); rw.completo.dia = leerInt('p-rw-comp-d');
   rw.soloWing.hora = leerInt('p-rw-wing-h'); rw.soloWing.dia = leerInt('p-rw-wing-d');
   rw.tablaFoil.hora = leerInt('p-rw-foil-h'); rw.tablaFoil.dia = leerInt('p-rw-foil-d');
-  precios.extras.protectorSolar = leerInt('p-protector');
-  precios.extras.lycras = leerInt('p-lycras');
-  precios.extras.cuipe = leerInt('p-cuipe');
+  precios.extras = leerExtrasDesdeSettings();
   precios.version = PRECIO_VERSION;
   localStorage.setItem('indianaKitePrecios', JSON.stringify(precios));
+  refrescarExtrasEnOpciones();
+  document.querySelectorAll('.option-content').forEach(c => actualizarPreview(parseInt(c.id.split('-')[1], 10)));
   const btn = document.getElementById('guardarPreciosBtn');
   btn.textContent = '✓ Guardado!';
   setTimeout(() => { btn.textContent = '💾 Guardar'; }, 2000);
@@ -1592,10 +1745,17 @@ function guardarPrecios() {
 
 function cargarPreciosGuardados() {
   const g = localStorage.getItem('indianaKitePrecios');
-  if (g) {
-    const saved = JSON.parse(g);
-    if (saved.version === PRECIO_VERSION) deepMerge(precios, saved);
-    // versión antigua: ignorar y usar defaults 2026
+  if (!g) return;
+  const saved = JSON.parse(g);
+  if (saved.version === PRECIO_VERSION) {
+    deepMerge(precios, saved);
+    precios.extras = normalizarExtrasArray(precios.extras);
+  } else if (saved.version === 2) {
+    const extrasV2 = saved.extras;
+    delete saved.extras;
+    deepMerge(precios, saved);
+    precios.extras = migrarExtrasDesdeV2(extrasV2);
+    precios.version = PRECIO_VERSION;
   }
 }
 
@@ -1613,8 +1773,11 @@ function deepMerge(t, s) {
 function resetearPrecios() {
   if (confirm('¿Restaurar precios 2026 originales?')) {
     precios = JSON.parse(JSON.stringify(preciosDefault));
+    extraIdCounter = 3;
     localStorage.removeItem('indianaKitePrecios');
     sincronizarInputsPrecios();
+    refrescarExtrasEnOpciones();
+    document.querySelectorAll('.option-content').forEach(c => actualizarPreview(parseInt(c.id.split('-')[1], 10)));
   }
 }
 </script>
