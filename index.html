@@ -77,6 +77,16 @@
             color: var(--color-text-muted);
         }
 
+        .sync-status {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        .sync-status.offline { color: var(--color-text-muted); }
+        .sync-status.error { color: #b54a32; }
+
         /* Segmented control */
         .main-tabs {
             display: flex;
@@ -314,57 +324,91 @@
 
         .radio-option input[type="radio"]:checked + label small { color: rgba(255,255,255,0.7); }
 
-        /* Extras list */
-        .extras-list { display: flex; flex-direction: column; }
+        /* Extras settings — stacked cards (mobile-first) */
+        .extras-settings-list { display: flex; flex-direction: column; gap: 10px; }
 
-        .extra-settings-row {
+        .extra-settings-card {
+            background: var(--color-surface-muted);
+            border-radius: var(--radius-md);
+            padding: 12px;
+        }
+
+        .extra-settings-card-top {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--color-divider);
+            margin-bottom: 10px;
         }
 
-        .extra-settings-row:last-child { border-bottom: none; }
-
-        .extra-name-input {
+        .extra-settings-card .extra-name-input {
             flex: 1;
             min-width: 0;
-            padding: 10px 12px;
-            border: 1px solid var(--color-divider);
-            border-radius: var(--radius-sm);
-            font-size: 14px;
+            width: auto;
+            padding: 12px 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            text-align: left;
+            background: var(--color-surface);
             font-family: inherit;
+            color: var(--color-text);
         }
 
-        .extra-price-input { width: 72px; flex-shrink: 0; }
+        .extra-settings-card-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        .extra-price-unit {
+        .extra-settings-card-price .extra-price-prefix {
+            font-size: 14px;
+            font-weight: 600;
             color: var(--color-text-muted);
+            flex-shrink: 0;
+        }
+
+        .extra-settings-card .extra-price-input {
+            flex: 1;
+            width: auto;
+            min-width: 0;
+            padding: 12px 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            text-align: left;
+            background: var(--color-surface);
+            font-family: inherit;
+            color: var(--color-text);
+        }
+
+        .extra-settings-card .extra-price-unit {
             font-size: 13px;
+            color: var(--color-text-muted);
             flex-shrink: 0;
         }
 
         .extra-remove-btn {
-            width: 36px;
-            height: 36px;
             flex-shrink: 0;
+            padding: 8px 12px;
             border: 1px solid var(--color-divider);
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-pill);
             background: var(--color-surface);
             color: var(--color-text-muted);
-            font-size: 20px;
-            line-height: 1;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
             font-family: inherit;
+            white-space: nowrap;
         }
+
+        .extra-remove-btn:active { background: rgba(193, 98, 47, 0.08); color: var(--color-primary); }
 
         .btn-add-extra {
             width: 100%;
-            margin-top: 12px;
-            padding: 12px 16px;
+            margin-top: 4px;
+            padding: 14px 16px;
             border: 1px dashed var(--color-divider);
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             background: transparent;
             color: var(--color-primary);
             font-size: 14px;
@@ -372,6 +416,18 @@
             cursor: pointer;
             font-family: inherit;
         }
+
+        .extras-settings-empty {
+            padding: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--color-text-muted);
+            background: var(--color-surface-muted);
+            border-radius: var(--radius-md);
+        }
+
+        /* Extras list (cotizador) */
+        .extras-list { display: flex; flex-direction: column; }
 
         .checkbox-container {
             display: flex;
@@ -750,9 +806,10 @@
 <body>
 <div class="container">
     <div class="header">
-        <div class="header-eyebrow">Staff · v2 2026</div>
+        <div class="header-eyebrow">Staff · v3 2026</div>
         <h1>Indiana Kite</h1>
         <p>Cotizador en tiempo real</p>
+        <div class="sync-status" id="syncStatus">Conectando…</div>
     </div>
 
     <div class="main-tabs">
@@ -785,7 +842,7 @@
     </div>
 
     <div id="modoSettings" class="hidden">
-        <div class="settings-header"><h2>Precios 2026</h2><p>Los cambios se aplican de inmediato al guardar.</p></div>
+        <div class="settings-header"><h2>Precios 2026</h2><p>Los cambios se sincronizan para todo el equipo al guardar.</p></div>
 
         <div class="bento-card">
             <div class="bento-card-body section">
@@ -858,8 +915,8 @@
         <div class="bento-card">
             <div class="bento-card-body section">
             <div class="section-title">Extras</div>
-            <p class="settings-hint">Nombre + precio. Aparecen como checkboxes en cada cotización.</p>
-            <div id="extrasSettingsList"></div>
+            <p class="settings-hint">Agregá productos con nombre y precio. Tocá Guardar para aplicar en el cotizador.</p>
+            <div id="extrasSettingsList" class="extras-settings-list"></div>
             <button type="button" class="btn-add-extra" id="addExtraBtn">+ Agregar extra</button>
             </div>
         </div>
@@ -881,7 +938,11 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.1/dist/umd/supabase.min.js"></script>
 <script>
+const SUPABASE_URL = 'https://eypsxzctqdfdpvcfrtum.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5cHN4emN0cWRmZHB2Y2ZydHVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDcwMzMsImV4cCI6MjA5NjYyMzAzM30.8uauURbQQMMiePvyBTAweI644NxX3fQmeUqFw9FgRwU';
+const PRECIO_ROW_ID = 'main';
 const PRECIO_VERSION = 3;
 
 const preciosDefault = {
@@ -932,6 +993,122 @@ const preciosDefault = {
 
 let precios = JSON.parse(JSON.stringify(preciosDefault));
 let optionCounter = 0, currentLanguage = 'pt', extraIdCounter = 3;
+let supabase = null, savingPrecios = false, preciosRemoteUpdatedAt = null;
+
+function createSupabaseClient() {
+  if (!window.supabase) return null;
+  return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+function setSyncStatus(msg, kind) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.remove('offline', 'error');
+  if (kind) el.classList.add(kind);
+}
+
+function aplicarPreciosCargados(data, version) {
+  if (version === PRECIO_VERSION) {
+    deepMerge(precios, data);
+    precios.extras = normalizarExtrasArray(precios.extras);
+  } else if (version === 2) {
+    const extrasV2 = data.extras;
+    const copy = {...data};
+    delete copy.extras;
+    deepMerge(precios, copy);
+    precios.extras = migrarExtrasDesdeV2(extrasV2);
+  }
+  precios.version = PRECIO_VERSION;
+  initExtraIdCounter();
+}
+
+function cachePreciosLocal() {
+  localStorage.setItem('indianaKitePrecios', JSON.stringify(precios));
+}
+
+async function cargarPreciosDesdeSupabase() {
+  supabase = createSupabaseClient();
+  if (!supabase) {
+    cargarPreciosGuardados();
+    setSyncStatus('Sin conexión — datos locales', 'offline');
+    return;
+  }
+  setSyncStatus('Cargando precios…');
+  try {
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Timeout')), 10000)
+    );
+    const query = supabase
+      .from('cotizador_precios')
+      .select('version, data, updated_at')
+      .eq('id', PRECIO_ROW_ID)
+      .maybeSingle();
+    const { data, error } = await Promise.race([query, timeout]);
+    if (error) throw error;
+    if (data?.data && Object.keys(data.data).length > 0) {
+      aplicarPreciosCargados(data.data, data.version);
+      preciosRemoteUpdatedAt = data.updated_at;
+      cachePreciosLocal();
+      setSyncStatus('Sincronizado');
+      return;
+    }
+    cargarPreciosGuardados();
+    await guardarPreciosEnSupabase({ silent: true });
+    setSyncStatus('Sincronizado');
+  } catch (e) {
+    console.warn('Supabase load failed', e);
+    cargarPreciosGuardados();
+    setSyncStatus('Sin conexión — datos locales', 'offline');
+  }
+}
+
+async function guardarPreciosEnSupabase(opts = {}) {
+  if (!supabase) supabase = createSupabaseClient();
+  cachePreciosLocal();
+  if (!supabase) return false;
+  savingPrecios = true;
+  const updatedAt = new Date().toISOString();
+  const { error } = await supabase.from('cotizador_precios').upsert({
+    id: PRECIO_ROW_ID,
+    version: PRECIO_VERSION,
+    data: precios,
+    updated_at: updatedAt,
+  }, { onConflict: 'id' });
+  savingPrecios = false;
+  if (error) throw error;
+  preciosRemoteUpdatedAt = updatedAt;
+  if (!opts.silent) setSyncStatus('Sincronizado');
+  return true;
+}
+
+function subscribePreciosRealtime() {
+  if (!supabase) return;
+  supabase
+    .channel('cotizador_precios')
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'cotizador_precios',
+      filter: `id=eq.${PRECIO_ROW_ID}`,
+    }, payload => {
+      if (savingPrecios || !payload.new?.data) return;
+      const remoteAt = payload.new.updated_at;
+      if (preciosRemoteUpdatedAt && remoteAt <= preciosRemoteUpdatedAt) return;
+      aplicarPreciosCargados(payload.new.data, payload.new.version);
+      preciosRemoteUpdatedAt = remoteAt;
+      cachePreciosLocal();
+      renderExtrasSettings();
+      refrescarExtrasEnOpciones();
+      document.querySelectorAll('.option-content').forEach(c =>
+        actualizarPreview(parseInt(c.id.split('-')[1], 10))
+      );
+      setSyncStatus('Actualizado por otro dispositivo');
+    })
+    .subscribe(status => {
+      if (status === 'SUBSCRIBED') setSyncStatus('Sincronizado');
+    });
+}
 
 function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
@@ -985,29 +1162,39 @@ function buildExtrasCheckboxHtml(optionId, selectedIds) {
 }
 
 function crearFilaExtraSettings(extra) {
-  const row = document.createElement('div');
-  row.className = 'extra-settings-row';
+  const card = document.createElement('div');
+  card.className = 'extra-settings-card';
   const id = extra?.id || generarExtraId();
-  row.dataset.extraId = id;
-  row.innerHTML = `
-    <input type="text" class="extra-name-input" placeholder="Nombre" value="${extra ? escAttr(extra.name) : ''}">
-    <input type="number" class="extra-price-input price-input" min="0" value="${extra ? extra.price : ''}">
-    <span class="extra-price-unit">BRL</span>
-    <button type="button" class="extra-remove-btn" aria-label="Eliminar">×</button>
+  card.dataset.extraId = id;
+  card.innerHTML = `
+    <div class="extra-settings-card-top">
+      <input type="text" class="extra-name-input" placeholder="Nombre del producto" value="${extra ? escAttr(extra.name) : ''}">
+      <button type="button" class="extra-remove-btn">Eliminar</button>
+    </div>
+    <div class="extra-settings-card-price">
+      <span class="extra-price-prefix">R$</span>
+      <input type="number" class="extra-price-input" min="0" placeholder="0" value="${extra ? extra.price : ''}">
+      <span class="extra-price-unit">BRL</span>
+    </div>
   `;
-  row.querySelector('.extra-remove-btn').addEventListener('click', () => row.remove());
-  return row;
+  card.querySelector('.extra-remove-btn').addEventListener('click', () => card.remove());
+  return card;
 }
 
 function renderExtrasSettings() {
   const list = document.getElementById('extrasSettingsList');
   if (!list) return;
   list.innerHTML = '';
-  (precios.extras || []).forEach(extra => list.appendChild(crearFilaExtraSettings(extra)));
+  const extras = precios.extras || [];
+  if (extras.length === 0) {
+    list.innerHTML = '<div class="extras-settings-empty">Sin extras. Agregá el primero abajo.</div>';
+    return;
+  }
+  extras.forEach(extra => list.appendChild(crearFilaExtraSettings(extra)));
 }
 
 function leerExtrasDesdeSettings() {
-  const rows = document.querySelectorAll('#extrasSettingsList .extra-settings-row');
+  const rows = document.querySelectorAll('#extrasSettingsList .extra-settings-card');
   const extras = [];
   rows.forEach(row => {
     const name = row.querySelector('.extra-name-input')?.value?.trim();
@@ -1016,6 +1203,16 @@ function leerExtrasDesdeSettings() {
     if (name) extras.push({id, name, price});
   });
   return extras;
+}
+
+function agregarFilaExtraSettings() {
+  const list = document.getElementById('extrasSettingsList');
+  if (!list) return;
+  const empty = list.querySelector('.extras-settings-empty');
+  if (empty) empty.remove();
+  const card = crearFilaExtraSettings();
+  list.appendChild(card);
+  card.querySelector('.extra-name-input')?.focus();
 }
 
 // ── Cálculos ──────────────────────────────────────────────────────────────────
@@ -1127,19 +1324,17 @@ function calcularExtras(selectedIds, cfg) {
 
 // ── UI principal ──────────────────────────────────────────────────────────────
 
-window.addEventListener('DOMContentLoaded', function() {
-  cargarPreciosGuardados();
-  initExtraIdCounter();
+window.addEventListener('DOMContentLoaded', async function() {
+  await cargarPreciosDesdeSupabase();
   renderExtrasSettings();
   crearPrimeraOpcion();
+  subscribePreciosRealtime();
   document.getElementById('addOptionBtn').addEventListener('click', agregarOpcion);
   document.getElementById('generarBtn').addEventListener('click', generarComparacion);
   document.getElementById('copiarBtn').addEventListener('click', copiarMensaje);
   document.getElementById('guardarPreciosBtn').addEventListener('click', guardarPrecios);
   document.getElementById('resetPreciosBtn').addEventListener('click', resetearPrecios);
-  document.getElementById('addExtraBtn').addEventListener('click', function() {
-    document.getElementById('extrasSettingsList').appendChild(crearFilaExtraSettings());
-  });
+  document.getElementById('addExtraBtn').addEventListener('click', agregarFilaExtraSettings);
   document.querySelectorAll('.language-tab').forEach(t=>t.addEventListener('click',function(){cambiarIdioma(this.getAttribute('data-lang'));}));
   document.querySelectorAll('.main-tab').forEach(t=>t.addEventListener('click',function(){cambiarModo(this.getAttribute('data-mode'),this);}));
 });
@@ -1692,7 +1887,7 @@ function sincronizarInputsPrecios() {
 
 function leerInt(id) { return parseInt(document.getElementById(id)?.value) || 0; }
 
-function guardarPrecios() {
+async function guardarPrecios() {
   const l = precios.lodging;
   const sMap = {LOW:'LOW',MID:'MID',HIGH:'HIGH',AÑONUEVO:'AN'};
   ['LOW','MID','HIGH','AÑONUEVO'].forEach(s => {
@@ -1735,11 +1930,22 @@ function guardarPrecios() {
   rw.tablaFoil.hora = leerInt('p-rw-foil-h'); rw.tablaFoil.dia = leerInt('p-rw-foil-d');
   precios.extras = leerExtrasDesdeSettings();
   precios.version = PRECIO_VERSION;
-  localStorage.setItem('indianaKitePrecios', JSON.stringify(precios));
-  refrescarExtrasEnOpciones();
-  document.querySelectorAll('.option-content').forEach(c => actualizarPreview(parseInt(c.id.split('-')[1], 10)));
+
   const btn = document.getElementById('guardarPreciosBtn');
-  btn.textContent = '✓ Guardado!';
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+  try {
+    await guardarPreciosEnSupabase();
+    refrescarExtrasEnOpciones();
+    document.querySelectorAll('.option-content').forEach(c => actualizarPreview(parseInt(c.id.split('-')[1], 10)));
+    btn.textContent = '✓ Guardado!';
+  } catch (e) {
+    console.warn('Supabase save failed', e);
+    cachePreciosLocal();
+    setSyncStatus('Error al guardar — solo en este dispositivo', 'error');
+    btn.textContent = '⚠ Solo local';
+  }
+  btn.disabled = false;
   setTimeout(() => { btn.textContent = '💾 Guardar'; }, 2000);
 }
 
@@ -1747,16 +1953,7 @@ function cargarPreciosGuardados() {
   const g = localStorage.getItem('indianaKitePrecios');
   if (!g) return;
   const saved = JSON.parse(g);
-  if (saved.version === PRECIO_VERSION) {
-    deepMerge(precios, saved);
-    precios.extras = normalizarExtrasArray(precios.extras);
-  } else if (saved.version === 2) {
-    const extrasV2 = saved.extras;
-    delete saved.extras;
-    deepMerge(precios, saved);
-    precios.extras = migrarExtrasDesdeV2(extrasV2);
-    precios.version = PRECIO_VERSION;
-  }
+  aplicarPreciosCargados(saved, saved.version);
 }
 
 function deepMerge(t, s) {
@@ -1770,15 +1967,25 @@ function deepMerge(t, s) {
   }
 }
 
-function resetearPrecios() {
-  if (confirm('¿Restaurar precios 2026 originales?')) {
-    precios = JSON.parse(JSON.stringify(preciosDefault));
-    extraIdCounter = 3;
-    localStorage.removeItem('indianaKitePrecios');
-    sincronizarInputsPrecios();
-    refrescarExtrasEnOpciones();
-    document.querySelectorAll('.option-content').forEach(c => actualizarPreview(parseInt(c.id.split('-')[1], 10)));
+async function resetearPrecios() {
+  if (!confirm('¿Restaurar precios 2026 originales? Se aplicará para todo el equipo.')) return;
+  precios = JSON.parse(JSON.stringify(preciosDefault));
+  extraIdCounter = 3;
+  sincronizarInputsPrecios();
+  refrescarExtrasEnOpciones();
+  document.querySelectorAll('.option-content').forEach(c => actualizarPreview(parseInt(c.id.split('-')[1], 10)));
+  const btn = document.getElementById('resetPreciosBtn');
+  btn.disabled = true;
+  try {
+    await guardarPreciosEnSupabase();
+    btn.textContent = '✓ Restaurado';
+  } catch (e) {
+    cachePreciosLocal();
+    setSyncStatus('Error al restaurar en la nube', 'error');
+    btn.textContent = '⚠ Solo local';
   }
+  btn.disabled = false;
+  setTimeout(() => { btn.textContent = '🔄 Restaurar 2026'; }, 2000);
 }
 </script>
 </body>
