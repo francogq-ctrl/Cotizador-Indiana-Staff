@@ -1,0 +1,8 @@
+# backups / scratch
+index-step1.html
+_*
+.DS_Store
+
+# local docs (stay in indiana 2026 workspace only)
+CLAUDE.md
+MEMORY.md
