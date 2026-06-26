@@ -3,153 +3,716 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cotizador Indiana Kite - Comparador</title>
+    <title>Cotizador Indiana Kite - Staff</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+:root {
+            --color-primary: #C1622F;
+            --color-dark: #2C2C2C;
+            --color-accent: #E8845A;
+            --color-bg: #F8F6F2;
+            --color-surface: #FFFFFF;
+            --color-surface-muted: #F3F0EB;
+            --color-whatsapp: #4A7C59;
+            --color-text: #2C2C2C;
+            --color-text-muted: #8A8278;
+            --color-divider: rgba(44, 44, 44, 0.06);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --radius-pill: 999px;
+            --gap: 12px;
+            --shadow-card: 0 2px 12px rgba(44, 44, 44, 0.06);
+            --sticky-h: 88px;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; }
-        .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 20px; padding: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0; }
-        .header h1 { color: #667eea; font-size: 28px; margin-bottom: 5px; }
-        .header p { color: #666; font-size: 14px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 10px; }
-        .tab { flex: 1; min-width: 120px; padding: 12px 20px; background: #f5f5f5; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; text-align: center; font-weight: 600; transition: all 0.3s; position: relative; }
-        .tab.active { background: #667eea; color: white; border-color: #667eea; }
-        .tab .remove-tab { position: absolute; top: -8px; right: -8px; width: 24px; height: 24px; background: #ff4444; color: white; border-radius: 50%; border: 2px solid white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .add-option-btn { width: 100%; padding: 15px; background: #4CAF50; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .section { margin-bottom: 25px; }
-        .section-title { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 15px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 500; color: #555; margin-bottom: 8px; font-size: 14px; }
-        input[type="text"], input[type="number"], select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; }
-        input:focus, select:focus { outline: none; border-color: #667eea; }
-        .radio-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; }
-        .radio-option { position: relative; }
-        .radio-option input[type="radio"] { position: absolute; opacity: 0; }
-        .radio-option label { display: block; padding: 12px 8px; background: #f5f5f5; border: 2px solid #e0e0e0; border-radius: 10px; text-align: center; cursor: pointer; font-weight: 500; margin: 0; font-size: 13px; }
-        .radio-option input[type="radio"]:checked + label { background: #667eea; color: white; border-color: #667eea; }
-        .checkbox-container { display: flex; align-items: center; gap: 10px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 2px solid #dee2e6; }
-        .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
-        .checkbox-container label { margin: 0; cursor: pointer; font-size: 14px; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            padding: 12px 12px calc(var(--sticky-h) + 16px);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+
+        /* Header — minimal */
+        .header {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 20px 22px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .header-eyebrow {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            margin-bottom: 4px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-dark);
+        }
+
+        .header p {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+
+        /* Segmented control */
+        .main-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--color-surface);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+            box-shadow: var(--shadow-card);
+        }
+
+        .main-tab {
+            flex: 1;
+            padding: 11px 16px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--color-text-muted);
+            font-family: inherit;
+        }
+
+        .main-tab.active {
+            background: var(--color-dark);
+            color: var(--color-surface);
+        }
+
+        /* Cards */
+        .bento-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .bento-card-body { padding: 18px 20px; }
+
+        .lead-card { padding: 16px 20px; }
+
+        .lead-card input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 17px;
+            font-weight: 600;
+            font-family: inherit;
+            color: var(--color-text);
+        }
+
+        .lead-card input::placeholder {
+            color: var(--color-text-muted);
+            font-weight: 400;
+        }
+
+        .lead-card input:focus { outline: none; }
+
+        /* Option tabs */
+        .options-toolbar { display: flex; flex-direction: column; gap: 10px; }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 2px 0;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            flex-shrink: 0;
+            padding: 10px 16px;
+            background: var(--color-surface);
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--color-text-muted);
+            box-shadow: var(--shadow-card);
+            position: relative;
+            font-family: inherit;
+        }
+
+        .tab.active {
+            color: var(--color-surface);
+        }
+
+        .tab.active[data-option="1"], .option-card-header.c1 { background: #C1622F; }
+        .tab.active[data-option="2"], .option-card-header.c2 { background: #4A7C59; }
+        .tab.active[data-option="3"], .option-card-header.c3 { background: #D4845A; }
+        .tab.active[data-option="4"], .option-card-header.c4 { background: #7A6B5A; }
+        .tab.active[data-option="5"], .option-card-header.c5 { background: #5A8A9F; }
+
+        .tab .remove-tab {
+            position: absolute;
+            top: -5px;
+            right: -4px;
+            width: 18px;
+            height: 18px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            border: 2px solid var(--color-bg);
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .add-option-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: var(--color-primary);
+            border: 1.5px dashed rgba(193, 98, 47, 0.35);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Option card — single card per quote */
         .option-content { display: none; }
         .option-content.active { display: block; }
-        .result-box { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; margin-top: 20px; }
-        .result-item { display: flex; justify-content: space-between; padding: 8px 0; font-size: 16px; }
-        .comparador-box { background: #25D366; color: white; padding: 25px; border-radius: 15px; margin-top: 30px; }
-        .comparador-box h3 { margin-bottom: 20px; font-size: 20px; }
-        .language-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .language-tab { flex: 1; padding: 10px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; cursor: pointer; text-align: center; font-weight: 600; }
-        .language-tab.active { background: white; color: #25D366; }
-        .whatsapp-message { background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; font-size: 14px; line-height: 1.8; white-space: pre-line; margin-bottom: 15px; max-height: 400px; overflow-y: auto; display: none; }
-        .whatsapp-message.active { display: block; }
-        .btn { width: 100%; padding: 15px; background: white; color: #25D366; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .hidden { display: none; }
-        .nombre-lead-box { background: #f0f7ff; border: 2px solid #667eea; padding: 20px; border-radius: 15px; margin-bottom: 25px; }
-        .nombre-lead-box input { font-size: 18px; font-weight: 600; }
-        .info-text { background: #e7f3ff; border-left: 4px solid #667eea; padding: 12px; margin-top: 10px; border-radius: 5px; font-size: 12px; color: #333; line-height: 1.6; }
-        .main-tabs { display: flex; gap: 10px; margin-bottom: 25px; background: #f5f5f5; padding: 5px; border-radius: 12px; }
-        .main-tab { flex: 1; padding: 12px 20px; background: transparent; border: none; border-radius: 8px; cursor: pointer; text-align: center; font-weight: 600; color: #666; }
-        .main-tab.active { background: #667eea; color: white; }
-        .settings-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #f0f0f0; }
-        .settings-header h2 { color: #667eea; font-size: 24px; margin-bottom: 8px; }
-        .settings-header p { color: #666; font-size: 14px; }
-        .price-table { width: 100%; margin-bottom: 20px; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .price-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; border-bottom: 1px solid #f0f0f0; }
-        .price-row.header-row { background: #667eea; color: white; font-weight: 600; }
-        .price-cell { padding: 12px; display: flex; align-items: center; justify-content: center; }
-        .price-cell.label { justify-content: flex-start; font-weight: 500; }
-        .price-input { width: 80px; padding: 8px; border: 2px solid #e0e0e0; border-radius: 6px; text-align: center; font-size: 14px; font-weight: 600; }
-        .price-simple { display: flex; align-items: center; gap: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px; flex-wrap: wrap; }
-        .price-simple label { margin: 0; font-weight: 500; }
-        .price-simple-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .price-simple-grid > div { display: flex; align-items: center; gap: 10px; padding: 15px; background: #f8f9fa; border-radius: 10px; }
-        .price-simple-grid label { margin: 0; font-weight: 500; font-size: 14px; flex: 1; }
-        .price-simple-grid span { color: #666; font-size: 14px; }
-        .settings-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+
+        .option-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+
+        .option-card-header {
+            padding: 14px 20px;
+            color: var(--color-surface);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .option-card-body { padding: 4px 20px 20px; }
+
+        .form-section {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .form-section:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .section-title-spaced { margin-top: 4px; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group:last-child { margin-bottom: 0; }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            color: var(--color-text);
+            background: var(--color-surface-muted);
+            font-family: inherit;
+        }
+
+        input:focus, select:focus,
+        .price-input:focus,
+        .rental-price-row input:focus,
+        .clase-price-row input:focus {
+            outline: 2px solid rgba(193, 98, 47, 0.25);
+            outline-offset: 0;
+        }
+
+        /* Radios — airy pills */
+        .radio-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .radio-group-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .radio-group-5 { display: grid; grid-template-columns: 1fr; gap: 8px; }
+
+        .radio-option { position: relative; }
+        .radio-option input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+        .radio-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 12px;
+            background: var(--color-surface-muted);
+            border-radius: var(--radius-md);
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.3;
+            color: var(--color-text);
+        }
+
+        .radio-option label small {
+            display: block;
+            font-size: 10px;
+            color: var(--color-text-muted);
+            margin-top: 2px;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: var(--color-dark);
+            color: var(--color-surface);
+        }
+
+        .radio-option input[type="radio"]:checked + label small { color: rgba(255,255,255,0.7); }
+
+        /* Extras list */
+        .extras-list { display: flex; flex-direction: column; }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .checkbox-container:last-child { border-bottom: none; }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .checkbox-container label {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-text);
+            flex: 1;
+        }
+
+        .rental-checkboxes { display: flex; flex-direction: column; }
+        .rental-checkboxes .checkbox-container { padding: 12px 0; }
         .rental-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .rental-checkboxes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-        .rental-checkboxes .checkbox-container { padding: 10px; font-size: 13px; }
-        .rental-settings-section { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-        .rental-settings-section h4 { color: #667eea; margin-bottom: 10px; font-size: 14px; }
-        .rental-price-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 8px; align-items: center; }
-        .rental-price-row span { font-size: 13px; }
-        .rental-price-row input { width: 70px; padding: 6px; border: 2px solid #e0e0e0; border-radius: 6px; text-align: center; font-size: 13px; }
-        @media (max-width: 600px) { .price-row { grid-template-columns: 1.5fr 1fr 1fr 1fr; font-size: 12px; } .price-input { width: 60px; font-size: 12px; } .settings-actions { grid-template-columns: 1fr; } .rental-grid, .rental-checkboxes { grid-template-columns: 1fr; } }
+
+        /* Hidden result (JS still updates) */
+        .result-box { display: none !important; }
+
+        /* Sticky bar */
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-divider);
+            padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 -4px 20px rgba(44, 44, 44, 0.08);
+        }
+
+        .sticky-bar.hidden { display: none !important; }
+
+        .sticky-bar-inner {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sticky-total { flex: 1; min-width: 0; }
+
+        .sticky-total-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--color-text-muted);
+        }
+
+        .sticky-total-value {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--color-dark);
+            line-height: 1.1;
+        }
+
+        .sticky-bar .btn-generar {
+            flex-shrink: 0;
+            width: auto;
+            padding: 14px 20px;
+            margin: 0;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius-pill);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-generar {
+            background: var(--color-whatsapp);
+            color: var(--color-surface);
+        }
+
+        .btn-save { background: var(--color-whatsapp); color: var(--color-surface); }
+        .btn-reset { background: var(--color-surface-muted); color: var(--color-dark); }
+
+        .hidden { display: none !important; }
+
+        #modoCotizador, #modoSettings {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+
+        #modoCotizador.hidden, #modoSettings.hidden { display: none !important; }
+
+        .info-text {
+            background: var(--color-surface-muted);
+            padding: 12px 14px;
+            margin-top: 10px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        .info-text.green {
+            background: rgba(74, 124, 89, 0.08);
+            color: var(--color-whatsapp);
+        }
+
+        /* WhatsApp preview */
+        .comparador-box {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .comparador-box h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--color-dark);
+        }
+
+        .language-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--color-surface-muted);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+            margin-bottom: 14px;
+        }
+
+        .language-tab {
+            flex: 1;
+            padding: 9px 8px;
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--color-text-muted);
+            font-family: inherit;
+        }
+
+        .language-tab.active {
+            background: var(--color-surface);
+            color: var(--color-dark);
+            box-shadow: var(--shadow-card);
+        }
+
+        .whatsapp-message {
+            background: var(--color-surface-muted);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-line;
+            margin-bottom: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+            display: none;
+            color: var(--color-text);
+        }
+
+        .whatsapp-message.active { display: block; }
+
+        .comparador-box .btn {
+            background: var(--color-dark);
+            color: var(--color-surface);
+        }
+
+        /* Settings */
+        .settings-header {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+        }
+
+        .settings-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 4px;
+        }
+
+        .settings-header p { font-size: 13px; color: var(--color-text-muted); }
+
+        .settings-subtitle {
+            margin: 14px 0 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .section { margin-bottom: 0; }
+
+        .price-table {
+            width: 100%;
+            margin-bottom: 12px;
+            background: var(--color-surface-muted);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .price-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .price-row:last-child { border-bottom: none; }
+
+        .price-row.header-row {
+            background: var(--color-dark);
+            color: var(--color-surface);
+            font-weight: 600;
+        }
+
+        .price-row.añonuevo-row { background: rgba(232, 132, 90, 0.12); }
+
+        .price-cell {
+            padding: 9px 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .price-cell.label {
+            justify-content: flex-start;
+            padding-left: 10px;
+            font-weight: 500;
+        }
+
+        .price-input {
+            width: 54px;
+            padding: 7px 4px;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--color-surface);
+            font-family: inherit;
+        }
+
+        .price-simple {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--color-surface-muted);
+            border-radius: var(--radius-md);
+            flex-wrap: wrap;
+        }
+
+        .price-simple label { margin: 0; font-size: 14px; }
+
+        .price-simple-grid { display: flex; flex-direction: column; }
+
+        .price-simple-grid > div {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .price-simple-grid > div:last-child { border-bottom: none; }
+        .price-simple-grid label { flex: 1; margin: 0; font-size: 14px; }
+        .price-simple-grid span { color: var(--color-text-muted); font-size: 13px; }
+
+        .settings-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .rental-settings-section {
+            background: var(--color-surface-muted);
+            padding: 14px;
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+        }
+
+        .rental-settings-section:last-child { margin-bottom: 0; }
+
+        .rental-price-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+
+        .rental-price-row span { font-size: 12px; color: var(--color-text-muted); }
+
+        .rental-price-row input {
+            width: 54px;
+            padding: 7px 4px;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            background: var(--color-surface);
+            font-family: inherit;
+        }
+
+        .clase-price-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+
+        .clase-price-row span { font-size: 12px; color: var(--color-text-muted); }
+
+        .clase-price-row input {
+            width: 60px;
+            padding: 7px 4px;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 12px;
+            background: var(--color-surface);
+            font-family: inherit;
+        }
+
+        @media (max-width: 600px) {
+            .sticky-bar .btn-generar { padding: 14px 16px; font-size: 13px; }
+            .sticky-total-value { font-size: 22px; }
+            .settings-actions { grid-template-columns: 1fr; }
+            .rental-grid, .rental-checkboxes { grid-template-columns: 1fr; }
+            .price-row { grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; }
+            .price-input { width: 44px; }
+            .rental-price-row { grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header"><h1>🌬️ Indiana Kite</h1><p>Comparador de Opciones - Multi-Cotización</p></div>
-        <div class="main-tabs"><div class="main-tab active" data-mode="cotizador">📊 Cotizador</div><div class="main-tab" data-mode="settings">⚙️ Precios</div></div>
-        <div id="modoCotizador">
-            <div class="nombre-lead-box"><label style="color: #667eea; font-size: 16px;">👤 Nombre del lead</label><input type="text" id="nombreLeadGlobal" placeholder="Ej: María Silva"></div>
+<div class="container">
+    <div class="header">
+        <div class="header-eyebrow">Staff · v2 2026</div>
+        <h1>Indiana Kite</h1>
+        <p>Cotizador en tiempo real</p>
+    </div>
+
+    <div class="main-tabs">
+        <div class="main-tab active" data-mode="cotizador">Cotizador</div>
+        <div class="main-tab" data-mode="settings">Precios</div>
+    </div>
+
+    <div id="modoCotizador">
+        <div class="bento-card lead-card">
+            <input type="text" id="nombreLeadGlobal" placeholder="Nombre del lead">
+        </div>
+
+        <div class="options-toolbar">
             <div class="tabs" id="tabsContainer"></div>
             <button class="add-option-btn" id="addOptionBtn">+ Agregar otra opción</button>
-            <div id="optionsContainer"></div>
         </div>
-        <div id="modoSettings" class="hidden">
-            <div class="settings-header"><h2>⚙️ Configuración de Precios</h2><p>Modifica los precios. Los cambios se aplican inmediatamente.</p></div>
-            <div class="section">
-                <div class="section-title">🏠 Habitaciones por Noche (BRL)</div>
-                <div class="price-table">
-                    <div class="price-row header-row"><div class="price-cell">Tipo</div><div class="price-cell">LOW</div><div class="price-cell">MID</div><div class="price-cell">HIGH</div></div>
-                    <div class="price-row"><div class="price-cell label">Compartida 8 camas (pp)</div><div class="price-cell"><input type="number" id="precio-comp8-LOW" value="60" class="price-input"></div><div class="price-cell"><input type="number" id="precio-comp8-MID" value="80" class="price-input"></div><div class="price-cell"><input type="number" id="precio-comp8-HIGH" value="100" class="price-input"></div></div>
-                    <div class="price-row"><div class="price-cell label">Compartida 4 camas (pp)</div><div class="price-cell"><input type="number" id="precio-comp4-LOW" value="70" class="price-input"></div><div class="price-cell"><input type="number" id="precio-comp4-MID" value="90" class="price-input"></div><div class="price-cell"><input type="number" id="precio-comp4-HIGH" value="110" class="price-input"></div></div>
-                </div>
-                <h3 style="margin-top: 30px; margin-bottom: 15px; font-size: 16px;">Privada sin aire</h3>
-                <div class="price-table">
-                    <div class="price-row header-row"><div class="price-cell">Personas</div><div class="price-cell">LOW</div><div class="price-cell">MID</div><div class="price-cell">HIGH</div></div>
-                    <div class="price-row"><div class="price-cell label">1p</div><div class="price-cell"><input type="number" id="precio-privSA-1-LOW" value="135" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privSA-1-MID" value="220" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privSA-1-HIGH" value="270" class="price-input"></div></div>
-                    <div class="price-row"><div class="price-cell label">2p</div><div class="price-cell"><input type="number" id="precio-privSA-2-LOW" value="180" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privSA-2-MID" value="280" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privSA-2-HIGH" value="330" class="price-input"></div></div>
-                    <div class="price-row"><div class="price-cell label">3p</div><div class="price-cell"><input type="number" id="precio-privSA-3-LOW" value="245" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privSA-3-MID" value="390" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privSA-3-HIGH" value="430" class="price-input"></div></div>
-                </div>
-                <h3 style="margin-top: 30px; margin-bottom: 15px; font-size: 16px;">Privada con aire</h3>
-                <div class="price-table">
-                    <div class="price-row header-row"><div class="price-cell">Personas</div><div class="price-cell">LOW</div><div class="price-cell">MID</div><div class="price-cell">HIGH</div></div>
-                    <div class="price-row"><div class="price-cell label">1p</div><div class="price-cell"><input type="number" id="precio-privCA-1-LOW" value="155" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privCA-1-MID" value="270" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privCA-1-HIGH" value="290" class="price-input"></div></div>
-                    <div class="price-row"><div class="price-cell label">2p</div><div class="price-cell"><input type="number" id="precio-privCA-2-LOW" value="200" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privCA-2-MID" value="330" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privCA-2-HIGH" value="360" class="price-input"></div></div>
-                    <div class="price-row"><div class="price-cell label">3p</div><div class="price-cell"><input type="number" id="precio-privCA-3-LOW" value="265" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privCA-3-MID" value="440" class="price-input"></div><div class="price-cell"><input type="number" id="precio-privCA-3-HIGH" value="460" class="price-input"></div></div>
-                </div>
-                <div class="price-simple"><label>Desayuno (pp/noche):</label><input type="number" id="precio-desayuno" value="25" class="price-input"><span>BRL</span></div>
-            </div>
-            <div class="section">
-                <div class="section-title">🪁 Clases</div>
-                <div class="price-simple-grid">
-                    <div><label>Kite Hora:</label><input type="number" id="precio-kite-hora" value="250" class="price-input"><span>BRL</span></div>
-                    <div><label>Kite Pack 10h:</label><input type="number" id="precio-kite-pack" value="2400" class="price-input"><span>BRL</span></div>
-                    <div><label>Kite Avanz/h:</label><input type="number" id="precio-kite-avanzadas" value="300" class="price-input"><span>BRL</span></div>
-                    <div><label>Wing Hora:</label><input type="number" id="precio-wing-hora" value="330" class="price-input"><span>BRL</span></div>
-                    <div><label>Wing Pack 10h:</label><input type="number" id="precio-wing-pack" value="3200" class="price-input"><span>BRL</span></div>
-                    <div><label>Wing Avanz/h:</label><input type="number" id="precio-wing-avanzadas" value="380" class="price-input"><span>BRL</span></div>
-                </div>
-            </div>
-            <div class="section">
-                <div class="section-title">🧰 Rental Kite</div>
-                <div class="rental-settings-section"><h4>Equipo Completo</h4><div class="rental-price-row"><span></span><span>1h</span><span>3h</span><span>Full</span></div><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-kite-completo-1h" value="150"><input type="number" id="precio-rental-kite-completo-3h" value="350"><input type="number" id="precio-rental-kite-completo-fullday" value="500"></div></div>
-                <div class="rental-settings-section"><h4>Solo Kite</h4><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-kite-soloKite-1h" value="100"><input type="number" id="precio-rental-kite-soloKite-3h" value="220"><input type="number" id="precio-rental-kite-soloKite-fullday" value="350"></div></div>
-                <div class="rental-settings-section"><h4>Solo Tabla</h4><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-kite-soloTabla-1h" value="50"><input type="number" id="precio-rental-kite-soloTabla-3h" value="120"><input type="number" id="precio-rental-kite-soloTabla-fullday" value="180"></div></div>
-                <div class="rental-settings-section"><h4>Solo Arnés</h4><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-kite-soloArnes-1h" value="30"><input type="number" id="precio-rental-kite-soloArnes-3h" value="70"><input type="number" id="precio-rental-kite-soloArnes-fullday" value="100"></div></div>
-                <div class="price-simple"><label>Desc. si días >:</label><input type="number" id="precio-rental-kite-umbral" value="3" class="price-input" style="width:60px"><label>%:</label><input type="number" id="precio-rental-kite-descuento" value="10" class="price-input" style="width:60px"></div>
-            </div>
-            <div class="section">
-                <div class="section-title">🧰 Rental Wing</div>
-                <div class="rental-settings-section"><h4>Equipo Completo</h4><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-wing-completo-1h" value="180"><input type="number" id="precio-rental-wing-completo-3h" value="400"><input type="number" id="precio-rental-wing-completo-fullday" value="600"></div></div>
-                <div class="rental-settings-section"><h4>Solo Wing</h4><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-wing-soloWing-1h" value="120"><input type="number" id="precio-rental-wing-soloWing-3h" value="280"><input type="number" id="precio-rental-wing-soloWing-fullday" value="450"></div></div>
-                <div class="rental-settings-section"><h4>Solo Tabla</h4><div class="rental-price-row"><span>R$</span><input type="number" id="precio-rental-wing-soloTabla-1h" value="60"><input type="number" id="precio-rental-wing-soloTabla-3h" value="140"><input type="number" id="precio-rental-wing-soloTabla-fullday" value="200"></div></div>
-            </div>
-            <div class="section">
-                <div class="section-title">🛍️ Extras</div>
-                <div class="price-simple-grid">
-                    <div><label>Protector Solar:</label><input type="number" id="precio-protector" value="115" class="price-input"><span>BRL</span></div>
-                    <div><label>Lycras:</label><input type="number" id="precio-lycras" value="180" class="price-input"><span>BRL</span></div>
-                    <div><label>Cuipe:</label><input type="number" id="precio-cuipe" value="80" class="price-input"><span>BRL</span></div>
-                </div>
-            </div>
-            <div class="settings-actions"><button class="btn" style="background:#4CAF50;color:white" id="guardarPreciosBtn">💾 Guardar</button><button class="btn" style="background:#ff9800;color:white" id="resetPreciosBtn">🔄 Restaurar</button></div>
-        </div>
-        <button class="btn" style="background:#667eea;color:white;margin-top:30px" id="generarBtn">📊 Generar Comparación</button>
+
+        <div id="optionsContainer"></div>
+
         <div id="resultadoComparador" class="hidden">
             <div class="comparador-box">
-                <h3>📱 Mensaje WhatsApp:</h3>
+                <h3>Mensaje WhatsApp</h3>
                 <div class="language-tabs"><div class="language-tab active" data-lang="pt">🇧🇷 PT</div><div class="language-tab" data-lang="es">🇦🇷 ES</div><div class="language-tab" data-lang="en">🇺🇸 EN</div></div>
                 <div class="whatsapp-message active" id="mensajePT"></div>
                 <div class="whatsapp-message" id="mensajeES"></div>
@@ -158,65 +721,902 @@
             </div>
         </div>
     </div>
-    <script>
-const precios={lodging:{compartida8:{LOW:60,MID:80,HIGH:100},compartida4:{LOW:70,MID:90,HIGH:110},privadaSinAire:{1:{LOW:135,MID:220,HIGH:270},2:{LOW:180,MID:280,HIGH:330},3:{LOW:245,MID:390,HIGH:430}},privadaConAire:{1:{LOW:155,MID:270,HIGH:290},2:{LOW:200,MID:330,HIGH:360},3:{LOW:265,MID:440,HIGH:460}},desayuno:25},school:{kite:{horaSuelta:250,pack10h:2400,avanzadas:300,rental:{completo:{'1h':150,'3h':350,fullday:500},soloKite:{'1h':100,'3h':220,fullday:350},soloTabla:{'1h':50,'3h':120,fullday:180},soloArnes:{'1h':30,'3h':70,fullday:100}},rentalDiscountPercent:10,rentalDiscountThreshold:3},wing:{horaSuelta:330,pack10h:3200,avanzadas:380,rental:{completo:{'1h':180,'3h':400,fullday:600},soloWing:{'1h':120,'3h':280,fullday:450},soloTabla:{'1h':60,'3h':140,fullday:200}}}},extras:{protectorSolar:115,lycras:180,cuipe:80}};
-const preciosOriginales=JSON.parse(JSON.stringify(precios));
-let optionCounter=0,currentLanguage='pt';
 
-function calcularHospedaje(d,cfg){const{temporada,habitacion,noches,personas,desayuno}=d;const items=[];let total=0;if(!temporada||!habitacion||!noches)return{items,total};const l=cfg.lodging;let pn=0;if(habitacion==='Compartida 8 camas'){pn=l.compartida8[temporada];const s=pn*personas*noches;items.push({label:`${habitacion} (${personas}p)`,qty:noches,unit:'noches',unitPrice:pn*personas,subtotal:s});total+=s;}else if(habitacion==='Compartida 4 camas'){pn=l.compartida4[temporada];const s=pn*personas*noches;items.push({label:`${habitacion} (${personas}p)`,qty:noches,unit:'noches',unitPrice:pn*personas,subtotal:s});total+=s;}else if(habitacion==='Privada sin aire'){pn=l.privadaSinAire[personas]?.[temporada]||0;const s=pn*noches;items.push({label:`${habitacion} (${personas}p)`,qty:noches,unit:'noches',unitPrice:pn,subtotal:s});total+=s;}else if(habitacion==='Privada con aire'){pn=l.privadaConAire[personas]?.[temporada]||0;const s=pn*noches;items.push({label:`${habitacion} (${personas}p)`,qty:noches,unit:'noches',unitPrice:pn,subtotal:s});total+=s;}if(desayuno==='si'){const pd=l.desayuno;const sd=pd*personas*noches;items.push({label:`Desayuno (${personas}p)`,qty:noches,unit:'noches',unitPrice:pd*personas,subtotal:sd});total+=sd;}return{items,total};}
+    <div id="modoSettings" class="hidden">
+        <div class="settings-header"><h2>Precios 2026</h2><p>Los cambios se aplican de inmediato al guardar.</p></div>
 
-function calcularClases(d,cfg){const{quiereClases,deporte,productoClase,horasClase}=d;const items=[];let total=0;if(quiereClases!=='si'||!deporte||!productoClase)return{items,total,descripcion:'Sin clases'};const sc=cfg.school;const dep=deporte.toLowerCase();let desc='';if(productoClase==='Hora suelta'){const h=horasClase||1;const up=sc[dep].horaSuelta;const st=up*h;items.push({label:`Clase ${deporte} (hora suelta)`,qty:h,unit:'horas',unitPrice:up,subtotal:st,isPerPerson:true});total=st;desc=`${deporte} - ${h}h`;}else if(productoClase==='Pack 10h'){const up=sc[dep].pack10h;items.push({label:`Clase ${deporte} Pack 10h`,qty:1,unit:'pack',unitPrice:up,subtotal:up,isPerPerson:true});total=up;desc=`${deporte} - Pack 10h`;}else if(productoClase==='Avanzadas'){const h=horasClase||1;const up=sc[dep].avanzadas;const st=up*h;items.push({label:`Clase ${deporte} Avanzada`,qty:h,unit:'horas',unitPrice:up,subtotal:st,isPerPerson:true});total=st;desc=`${deporte} - ${h}h avanzada`;}return{items,total,descripcion:desc};}
+        <div class="bento-card">
+            <div class="bento-card-body section">
+            <div class="section-title">Hospedaje — por noche/persona (BRL)</div>
+            <div class="price-table">
+                <div class="price-row header-row"><div class="price-cell label">Habitación</div><div class="price-cell">LOW</div><div class="price-cell">MID</div><div class="price-cell">HIGH</div><div class="price-cell">A.NUEVO</div></div>
+                <div class="price-row"><div class="price-cell label">Comp. 8 (Aire)</div><div class="price-cell"><input type="number" id="p-comp8-LOW" value="72" class="price-input"></div><div class="price-cell"><input type="number" id="p-comp8-MID" value="80" class="price-input"></div><div class="price-cell"><input type="number" id="p-comp8-HIGH" value="100" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-comp8-AN" value="170" class="price-input"></div></div>
+                <div class="price-row"><div class="price-cell label">Comp. Vent.</div><div class="price-cell"><input type="number" id="p-compV-LOW" value="75" class="price-input"></div><div class="price-cell"><input type="number" id="p-compV-MID" value="90" class="price-input"></div><div class="price-cell"><input type="number" id="p-compV-HIGH" value="110" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-compV-AN" value="190" class="price-input"></div></div>
+                <div class="price-row"><div class="price-cell label">Comp. Aire (Fem)</div><div class="price-cell"><input type="number" id="p-compA-LOW" value="85" class="price-input"></div><div class="price-cell"><input type="number" id="p-compA-MID" value="105" class="price-input"></div><div class="price-cell"><input type="number" id="p-compA-HIGH" value="125" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-compA-AN" value="210" class="price-input"></div></div>
+            </div>
+            <h3 class="settings-subtitle">Privada s/Aire</h3>
+            <div class="price-table">
+                <div class="price-row header-row"><div class="price-cell label">Personas</div><div class="price-cell">LOW</div><div class="price-cell">MID</div><div class="price-cell">HIGH</div><div class="price-cell">A.NUEVO</div></div>
+                <div class="price-row"><div class="price-cell label">1p</div><div class="price-cell"><input type="number" id="p-pSA-1-LOW" value="120" class="price-input"></div><div class="price-cell"><input type="number" id="p-pSA-1-MID" value="240" class="price-input"></div><div class="price-cell"><input type="number" id="p-pSA-1-HIGH" value="270" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-pSA-1-AN" value="440" class="price-input"></div></div>
+                <div class="price-row"><div class="price-cell label">2p</div><div class="price-cell"><input type="number" id="p-pSA-2-LOW" value="160" class="price-input"></div><div class="price-cell"><input type="number" id="p-pSA-2-MID" value="300" class="price-input"></div><div class="price-cell"><input type="number" id="p-pSA-2-HIGH" value="330" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-pSA-2-AN" value="500" class="price-input"></div></div>
+                <div class="price-row"><div class="price-cell label">3p</div><div class="price-cell"><input type="number" id="p-pSA-3-LOW" value="225" class="price-input"></div><div class="price-cell"><input type="number" id="p-pSA-3-MID" value="410" class="price-input"></div><div class="price-cell"><input type="number" id="p-pSA-3-HIGH" value="430" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-pSA-3-AN" value="600" class="price-input"></div></div>
+            </div>
+            <h3 class="settings-subtitle">Privada c/Aire (Suite)</h3>
+            <div class="price-table">
+                <div class="price-row header-row"><div class="price-cell label">Personas</div><div class="price-cell">LOW</div><div class="price-cell">MID</div><div class="price-cell">HIGH</div><div class="price-cell">A.NUEVO</div></div>
+                <div class="price-row"><div class="price-cell label">1p</div><div class="price-cell"><input type="number" id="p-pCA-1-LOW" value="180" class="price-input"></div><div class="price-cell"><input type="number" id="p-pCA-1-MID" value="270" class="price-input"></div><div class="price-cell"><input type="number" id="p-pCA-1-HIGH" value="290" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-pCA-1-AN" value="460" class="price-input"></div></div>
+                <div class="price-row"><div class="price-cell label">2p</div><div class="price-cell"><input type="number" id="p-pCA-2-LOW" value="240" class="price-input"></div><div class="price-cell"><input type="number" id="p-pCA-2-MID" value="330" class="price-input"></div><div class="price-cell"><input type="number" id="p-pCA-2-HIGH" value="360" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-pCA-2-AN" value="530" class="price-input"></div></div>
+                <div class="price-row"><div class="price-cell label">3p</div><div class="price-cell"><input type="number" id="p-pCA-3-LOW" value="310" class="price-input"></div><div class="price-cell"><input type="number" id="p-pCA-3-MID" value="440" class="price-input"></div><div class="price-cell"><input type="number" id="p-pCA-3-HIGH" value="460" class="price-input"></div><div class="price-cell añonuevo-row"><input type="number" id="p-pCA-3-AN" value="630" class="price-input"></div></div>
+            </div>
+            <div class="price-simple"><label>Desayuno (pp/noche):</label><input type="number" id="p-desayuno" value="25" class="price-input"><span>BRL</span></div>
+            </div>
+        </div>
 
-function calcularRental(d,cfg){const{quiereRental,deporteRental,duracionRental,diasRental,rentalItems}=d;const items=[];let total=0,descuentoTotal=0;if(quiereRental!=='si'||!deporteRental||!duracionRental||!rentalItems||rentalItems.length===0)return{items,total,descuentoTotal,descripcion:''};const sc=cfg.school;const dep=deporteRental.toLowerCase();const dias=diasRental||1;const durTxt=duracionRental==='fullday'?'Full Day':duracionRental;const tipoL={completo:'Equipo Completo',soloKite:'Solo Kite',soloTabla:'Solo Tabla',soloArnes:'Solo Arnés',soloWing:'Solo Wing'};rentalItems.forEach(tipo=>{const pb=sc[dep]?.rental?.[tipo]?.[duracionRental]||0;if(pb>0){const st=pb*dias;items.push({label:`Rental ${deporteRental} ${tipoL[tipo]||tipo} (${durTxt})`,qty:dias,unit:'días',unitPrice:pb,subtotal:st,isPerPerson:true});total+=st;}});if(dep==='kite'&&dias>sc.kite.rentalDiscountThreshold&&total>0){const pct=sc.kite.rentalDiscountPercent;descuentoTotal=Math.round(total*pct/100);total-=descuentoTotal;}const tiposTxt=rentalItems.map(t=>({completo:'Completo',soloKite:'Kite',soloTabla:'Tabla',soloArnes:'Arnés',soloWing:'Wing'}[t]||t)).join('+');let desc=`Rental ${deporteRental} ${tiposTxt} ${durTxt} x ${dias}d`;if(descuentoTotal>0)desc+=` (-${sc.kite.rentalDiscountPercent}%)`;return{items,total,descuentoTotal,descripcion:desc};}
+        <div class="bento-card">
+            <div class="bento-card-body section">
+            <div class="section-title">Clases Kite — por hora</div>
+            <div class="rental-settings-section">
+                <div class="clase-price-row"><span></span><span>Huésped</span><span>No huésped</span></div>
+                <div class="clase-price-row"><span>MID (Jun/Jul)</span><input type="number" id="p-kite-MID-h" value="240"><input type="number" id="p-kite-MID-nh" value="250"></div>
+                <div class="clase-price-row"><span>HIGH (Ago-Nov)</span><input type="number" id="p-kite-HIGH-h" value="270"><input type="number" id="p-kite-HIGH-nh" value="280"></div>
+            </div>
+            <div class="section-title section-title-spaced">Clases Wing — por hora</div>
+            <div class="rental-settings-section">
+                <div class="clase-price-row"><span></span><span>Huésped</span><span>No huésped</span></div>
+                <div class="clase-price-row"><span>MID/HIGH</span><input type="number" id="p-wing-h" value="280"><input type="number" id="p-wing-nh" value="300"></div>
+            </div>
+            </div>
+        </div>
 
-function calcularExtras(d,cfg){const{protectorSolar,lycras,cuipe}=d;const e=cfg.extras;const items=[];let total=0;if(protectorSolar){items.push({label:'Protector Solar',qty:1,unit:'un',unitPrice:e.protectorSolar,subtotal:e.protectorSolar,isPerPerson:true});total+=e.protectorSolar;}if(lycras){items.push({label:'Lycras',qty:1,unit:'un',unitPrice:e.lycras,subtotal:e.lycras,isPerPerson:true});total+=e.lycras;}if(cuipe){items.push({label:'Tarde en Cuipe',qty:1,unit:'un',unitPrice:e.cuipe,subtotal:e.cuipe,isPerPerson:true});total+=e.cuipe;}return{items,total};}
+        <div class="bento-card">
+            <div class="bento-card-body section">
+            <div class="section-title">Rental Kite — precios por duración</div>
+            <div class="rental-settings-section">
+                <div class="rental-price-row"><span></span><span>Sesión</span><span>1 Día</span><span>3+ Días</span><span>5+ Días</span></div>
+                <div class="rental-price-row"><span>Equipo Completo</span><input type="number" id="p-rk-comp-s" value="330"><input type="number" id="p-rk-comp-d1" value="440"><input type="number" id="p-rk-comp-d3" value="385"><input type="number" id="p-rk-comp-d5" value="350"></div>
+                <div class="rental-price-row"><span>Solo Kite</span><input type="number" id="p-rk-kite-s" value="100"><input type="number" id="p-rk-kite-d1" value="120"><input type="number" id="p-rk-kite-d3" value="75"><input type="number" id="p-rk-kite-d5" value="70"></div>
+                <div class="rental-price-row"><span>Solo Tabla</span><input type="number" id="p-rk-tabla-s" value="100"><input type="number" id="p-rk-tabla-d1" value="120"><input type="number" id="p-rk-tabla-d3" value="75"><input type="number" id="p-rk-tabla-d5" value="70"></div>
+                <div class="rental-price-row"><span>Solo Arnés</span><input type="number" id="p-rk-arnes-s" value="50"><input type="number" id="p-rk-arnes-d1" value="80"><input type="number" id="p-rk-arnes-d3" value="50"><input type="number" id="p-rk-arnes-d5" value="50"></div>
+            </div>
+            </div>
+        </div>
 
-window.addEventListener('DOMContentLoaded',function(){cargarPreciosGuardados();crearPrimeraOpcion();document.getElementById('addOptionBtn').addEventListener('click',agregarOpcion);document.getElementById('generarBtn').addEventListener('click',generarComparacion);document.getElementById('copiarBtn').addEventListener('click',copiarMensaje);document.getElementById('guardarPreciosBtn').addEventListener('click',guardarPrecios);document.getElementById('resetPreciosBtn').addEventListener('click',resetearPrecios);document.querySelectorAll('.language-tab').forEach(t=>t.addEventListener('click',function(){cambiarIdioma(this.getAttribute('data-lang'))}));document.querySelectorAll('.main-tab').forEach(t=>t.addEventListener('click',function(){cambiarModo(this.getAttribute('data-mode'),this)}));});
+        <div class="bento-card">
+            <div class="bento-card-body section">
+            <div class="section-title">Rental Wing — por hora / día completo</div>
+            <div class="rental-settings-section">
+                <div class="rental-price-row" style="grid-template-columns:2fr 1fr 1fr;"><span></span><span>Por hora</span><span>Día (3h)</span></div>
+                <div class="rental-price-row" style="grid-template-columns:2fr 1fr 1fr;"><span>Equipo Completo</span><input type="number" id="p-rw-comp-h" value="280"><input type="number" id="p-rw-comp-d" value="470"></div>
+                <div class="rental-price-row" style="grid-template-columns:2fr 1fr 1fr;"><span>Solo Wing</span><input type="number" id="p-rw-wing-h" value="180"><input type="number" id="p-rw-wing-d" value="370"></div>
+                <div class="rental-price-row" style="grid-template-columns:2fr 1fr 1fr;"><span>Tabla + Foil</span><input type="number" id="p-rw-foil-h" value="220"><input type="number" id="p-rw-foil-d" value="410"></div>
+            </div>
+            </div>
+        </div>
 
-function cambiarModo(modo,el){document.querySelectorAll('.main-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(modo==='cotizador'){document.getElementById('modoCotizador').classList.remove('hidden');document.getElementById('modoSettings').classList.add('hidden');document.getElementById('generarBtn').classList.remove('hidden');document.getElementById('resultadoComparador').classList.add('hidden');actualizarLabelsExtras();}else{document.getElementById('modoCotizador').classList.add('hidden');document.getElementById('modoSettings').classList.remove('hidden');document.getElementById('generarBtn').classList.add('hidden');document.getElementById('resultadoComparador').classList.add('hidden');sincronizarInputsPrecios();}}
+        <div class="bento-card">
+            <div class="bento-card-body section">
+            <div class="section-title">Extras</div>
+            <div class="price-simple-grid">
+                <div><label>Protector Solar:</label><input type="number" id="p-protector" value="115" class="price-input"><span>BRL</span></div>
+                <div><label>Lycras:</label><input type="number" id="p-lycras" value="180" class="price-input"><span>BRL</span></div>
+                <div><label>Cuipe:</label><input type="number" id="p-cuipe" value="80" class="price-input"><span>BRL</span></div>
+            </div>
+            </div>
+        </div>
 
-function actualizarLabelsExtras(){document.querySelectorAll('.option-content').forEach(c=>{const id=c.id.split('-')[1];const lp=document.getElementById(`label-protector-${id}`);const ll=document.getElementById(`label-lycras-${id}`);const lc=document.getElementById(`label-cuipe-${id}`);if(lp)lp.textContent=`Protector Solar (R$ ${precios.extras.protectorSolar})`;if(ll)ll.textContent=`Lycras (R$ ${precios.extras.lycras})`;if(lc)lc.textContent=`Tarde en Cuipe (R$ ${precios.extras.cuipe})`;});}
+        <div class="settings-actions">
+            <button class="btn btn-save" id="guardarPreciosBtn">💾 Guardar</button>
+            <button class="btn btn-reset" id="resetPreciosBtn">🔄 Restaurar 2026</button>
+        </div>
+    </div>
+</div>
 
-function sincronizarInputsPrecios(){document.getElementById('precio-comp8-LOW').value=precios.lodging.compartida8.LOW;document.getElementById('precio-comp8-MID').value=precios.lodging.compartida8.MID;document.getElementById('precio-comp8-HIGH').value=precios.lodging.compartida8.HIGH;document.getElementById('precio-comp4-LOW').value=precios.lodging.compartida4.LOW;document.getElementById('precio-comp4-MID').value=precios.lodging.compartida4.MID;document.getElementById('precio-comp4-HIGH').value=precios.lodging.compartida4.HIGH;for(let p=1;p<=3;p++){document.getElementById(`precio-privSA-${p}-LOW`).value=precios.lodging.privadaSinAire[p].LOW;document.getElementById(`precio-privSA-${p}-MID`).value=precios.lodging.privadaSinAire[p].MID;document.getElementById(`precio-privSA-${p}-HIGH`).value=precios.lodging.privadaSinAire[p].HIGH;document.getElementById(`precio-privCA-${p}-LOW`).value=precios.lodging.privadaConAire[p].LOW;document.getElementById(`precio-privCA-${p}-MID`).value=precios.lodging.privadaConAire[p].MID;document.getElementById(`precio-privCA-${p}-HIGH`).value=precios.lodging.privadaConAire[p].HIGH;}document.getElementById('precio-desayuno').value=precios.lodging.desayuno;document.getElementById('precio-kite-hora').value=precios.school.kite.horaSuelta;document.getElementById('precio-kite-pack').value=precios.school.kite.pack10h;document.getElementById('precio-kite-avanzadas').value=precios.school.kite.avanzadas;document.getElementById('precio-wing-hora').value=precios.school.wing.horaSuelta;document.getElementById('precio-wing-pack').value=precios.school.wing.pack10h;document.getElementById('precio-wing-avanzadas').value=precios.school.wing.avanzadas;document.getElementById('precio-rental-kite-completo-1h').value=precios.school.kite.rental.completo['1h'];document.getElementById('precio-rental-kite-completo-3h').value=precios.school.kite.rental.completo['3h'];document.getElementById('precio-rental-kite-completo-fullday').value=precios.school.kite.rental.completo.fullday;document.getElementById('precio-rental-kite-soloKite-1h').value=precios.school.kite.rental.soloKite['1h'];document.getElementById('precio-rental-kite-soloKite-3h').value=precios.school.kite.rental.soloKite['3h'];document.getElementById('precio-rental-kite-soloKite-fullday').value=precios.school.kite.rental.soloKite.fullday;document.getElementById('precio-rental-kite-soloTabla-1h').value=precios.school.kite.rental.soloTabla['1h'];document.getElementById('precio-rental-kite-soloTabla-3h').value=precios.school.kite.rental.soloTabla['3h'];document.getElementById('precio-rental-kite-soloTabla-fullday').value=precios.school.kite.rental.soloTabla.fullday;document.getElementById('precio-rental-kite-soloArnes-1h').value=precios.school.kite.rental.soloArnes['1h'];document.getElementById('precio-rental-kite-soloArnes-3h').value=precios.school.kite.rental.soloArnes['3h'];document.getElementById('precio-rental-kite-soloArnes-fullday').value=precios.school.kite.rental.soloArnes.fullday;document.getElementById('precio-rental-kite-umbral').value=precios.school.kite.rentalDiscountThreshold;document.getElementById('precio-rental-kite-descuento').value=precios.school.kite.rentalDiscountPercent;document.getElementById('precio-rental-wing-completo-1h').value=precios.school.wing.rental.completo['1h'];document.getElementById('precio-rental-wing-completo-3h').value=precios.school.wing.rental.completo['3h'];document.getElementById('precio-rental-wing-completo-fullday').value=precios.school.wing.rental.completo.fullday;document.getElementById('precio-rental-wing-soloWing-1h').value=precios.school.wing.rental.soloWing['1h'];document.getElementById('precio-rental-wing-soloWing-3h').value=precios.school.wing.rental.soloWing['3h'];document.getElementById('precio-rental-wing-soloWing-fullday').value=precios.school.wing.rental.soloWing.fullday;document.getElementById('precio-rental-wing-soloTabla-1h').value=precios.school.wing.rental.soloTabla['1h'];document.getElementById('precio-rental-wing-soloTabla-3h').value=precios.school.wing.rental.soloTabla['3h'];document.getElementById('precio-rental-wing-soloTabla-fullday').value=precios.school.wing.rental.soloTabla.fullday;document.getElementById('precio-protector').value=precios.extras.protectorSolar;document.getElementById('precio-lycras').value=precios.extras.lycras;document.getElementById('precio-cuipe').value=precios.extras.cuipe;}
+<div id="stickyBar" class="sticky-bar">
+    <div class="sticky-bar-inner">
+        <div class="sticky-total">
+            <div class="sticky-total-label">Total</div>
+            <div class="sticky-total-value" id="stickyTotal">R$ 0</div>
+        </div>
+        <button class="btn btn-generar" id="generarBtn">Generar WhatsApp</button>
+    </div>
+</div>
 
-function guardarPrecios(){precios.lodging.compartida8.LOW=parseInt(document.getElementById('precio-comp8-LOW').value)||0;precios.lodging.compartida8.MID=parseInt(document.getElementById('precio-comp8-MID').value)||0;precios.lodging.compartida8.HIGH=parseInt(document.getElementById('precio-comp8-HIGH').value)||0;precios.lodging.compartida4.LOW=parseInt(document.getElementById('precio-comp4-LOW').value)||0;precios.lodging.compartida4.MID=parseInt(document.getElementById('precio-comp4-MID').value)||0;precios.lodging.compartida4.HIGH=parseInt(document.getElementById('precio-comp4-HIGH').value)||0;for(let p=1;p<=3;p++){precios.lodging.privadaSinAire[p].LOW=parseInt(document.getElementById(`precio-privSA-${p}-LOW`).value)||0;precios.lodging.privadaSinAire[p].MID=parseInt(document.getElementById(`precio-privSA-${p}-MID`).value)||0;precios.lodging.privadaSinAire[p].HIGH=parseInt(document.getElementById(`precio-privSA-${p}-HIGH`).value)||0;precios.lodging.privadaConAire[p].LOW=parseInt(document.getElementById(`precio-privCA-${p}-LOW`).value)||0;precios.lodging.privadaConAire[p].MID=parseInt(document.getElementById(`precio-privCA-${p}-MID`).value)||0;precios.lodging.privadaConAire[p].HIGH=parseInt(document.getElementById(`precio-privCA-${p}-HIGH`).value)||0;}precios.lodging.desayuno=parseInt(document.getElementById('precio-desayuno').value)||0;precios.school.kite.horaSuelta=parseInt(document.getElementById('precio-kite-hora').value)||0;precios.school.kite.pack10h=parseInt(document.getElementById('precio-kite-pack').value)||0;precios.school.kite.avanzadas=parseInt(document.getElementById('precio-kite-avanzadas').value)||0;precios.school.wing.horaSuelta=parseInt(document.getElementById('precio-wing-hora').value)||0;precios.school.wing.pack10h=parseInt(document.getElementById('precio-wing-pack').value)||0;precios.school.wing.avanzadas=parseInt(document.getElementById('precio-wing-avanzadas').value)||0;precios.school.kite.rental.completo['1h']=parseInt(document.getElementById('precio-rental-kite-completo-1h').value)||0;precios.school.kite.rental.completo['3h']=parseInt(document.getElementById('precio-rental-kite-completo-3h').value)||0;precios.school.kite.rental.completo.fullday=parseInt(document.getElementById('precio-rental-kite-completo-fullday').value)||0;precios.school.kite.rental.soloKite['1h']=parseInt(document.getElementById('precio-rental-kite-soloKite-1h').value)||0;precios.school.kite.rental.soloKite['3h']=parseInt(document.getElementById('precio-rental-kite-soloKite-3h').value)||0;precios.school.kite.rental.soloKite.fullday=parseInt(document.getElementById('precio-rental-kite-soloKite-fullday').value)||0;precios.school.kite.rental.soloTabla['1h']=parseInt(document.getElementById('precio-rental-kite-soloTabla-1h').value)||0;precios.school.kite.rental.soloTabla['3h']=parseInt(document.getElementById('precio-rental-kite-soloTabla-3h').value)||0;precios.school.kite.rental.soloTabla.fullday=parseInt(document.getElementById('precio-rental-kite-soloTabla-fullday').value)||0;precios.school.kite.rental.soloArnes['1h']=parseInt(document.getElementById('precio-rental-kite-soloArnes-1h').value)||0;precios.school.kite.rental.soloArnes['3h']=parseInt(document.getElementById('precio-rental-kite-soloArnes-3h').value)||0;precios.school.kite.rental.soloArnes.fullday=parseInt(document.getElementById('precio-rental-kite-soloArnes-fullday').value)||0;precios.school.kite.rentalDiscountThreshold=parseInt(document.getElementById('precio-rental-kite-umbral').value)||3;precios.school.kite.rentalDiscountPercent=parseInt(document.getElementById('precio-rental-kite-descuento').value)||10;precios.school.wing.rental.completo['1h']=parseInt(document.getElementById('precio-rental-wing-completo-1h').value)||0;precios.school.wing.rental.completo['3h']=parseInt(document.getElementById('precio-rental-wing-completo-3h').value)||0;precios.school.wing.rental.completo.fullday=parseInt(document.getElementById('precio-rental-wing-completo-fullday').value)||0;precios.school.wing.rental.soloWing['1h']=parseInt(document.getElementById('precio-rental-wing-soloWing-1h').value)||0;precios.school.wing.rental.soloWing['3h']=parseInt(document.getElementById('precio-rental-wing-soloWing-3h').value)||0;precios.school.wing.rental.soloWing.fullday=parseInt(document.getElementById('precio-rental-wing-soloWing-fullday').value)||0;precios.school.wing.rental.soloTabla['1h']=parseInt(document.getElementById('precio-rental-wing-soloTabla-1h').value)||0;precios.school.wing.rental.soloTabla['3h']=parseInt(document.getElementById('precio-rental-wing-soloTabla-3h').value)||0;precios.school.wing.rental.soloTabla.fullday=parseInt(document.getElementById('precio-rental-wing-soloTabla-fullday').value)||0;precios.extras.protectorSolar=parseInt(document.getElementById('precio-protector').value)||0;precios.extras.lycras=parseInt(document.getElementById('precio-lycras').value)||0;precios.extras.cuipe=parseInt(document.getElementById('precio-cuipe').value)||0;localStorage.setItem('indianaKitePrecios',JSON.stringify(precios));const btn=document.getElementById('guardarPreciosBtn');btn.textContent='✓ Guardado!';setTimeout(()=>{btn.textContent='💾 Guardar'},2000);}
+<script>
+const PRECIO_VERSION = 2;
 
-function cargarPreciosGuardados(){const g=localStorage.getItem('indianaKitePrecios');if(g)deepMerge(precios,JSON.parse(g));}
-function deepMerge(t,s){for(const k in s){if(s[k]&&typeof s[k]==='object'&&!Array.isArray(s[k])){if(!t[k])t[k]={};deepMerge(t[k],s[k]);}else{t[k]=s[k];}}}
-function resetearPrecios(){if(confirm('¿Restaurar precios originales?')){deepMerge(precios,JSON.parse(JSON.stringify(preciosOriginales)));localStorage.removeItem('indianaKitePrecios');sincronizarInputsPrecios();}}
+const preciosDefault = {
+  version: PRECIO_VERSION,
+  lodging: {
+    compartida8:    {LOW:72,  MID:80,  HIGH:100, AÑONUEVO:170},
+    compartidaVent: {LOW:75,  MID:90,  HIGH:110, AÑONUEVO:190},
+    compartidaAire: {LOW:85,  MID:105, HIGH:125, AÑONUEVO:210},
+    privadaSinAire: {
+      1:{LOW:120,MID:240,HIGH:270,AÑONUEVO:440},
+      2:{LOW:160,MID:300,HIGH:330,AÑONUEVO:500},
+      3:{LOW:225,MID:410,HIGH:430,AÑONUEVO:600}
+    },
+    privadaConAire: {
+      1:{LOW:180,MID:270,HIGH:290,AÑONUEVO:460},
+      2:{LOW:240,MID:330,HIGH:360,AÑONUEVO:530},
+      3:{LOW:310,MID:440,HIGH:460,AÑONUEVO:630}
+    },
+    desayuno: 25
+  },
+  school: {
+    kite: {
+      horaSuelta: {MID:{h:240,nh:250}, HIGH:{h:270,nh:280}},
+      pack10h:    {MID:{h:2300,nh:2400}, HIGH:{h:2600,nh:2700}},
+      rental: {
+        completo:  {sesion:330,dia1:440,dias3:385,dias5:350},
+        soloKite:  {sesion:100,dia1:120,dias3:75, dias5:70},
+        soloTabla: {sesion:100,dia1:120,dias3:75, dias5:70},
+        soloArnes: {sesion:50, dia1:80, dias3:50, dias5:50}
+      }
+    },
+    wing: {
+      horaSuelta: {MID:{h:280,nh:300}, HIGH:{h:280,nh:300}},
+      pack10h:    {MID:{h:2700,nh:2900}, HIGH:{h:2700,nh:2900}},
+      rental: {
+        completo:  {hora:280,dia:470},
+        soloWing:  {hora:180,dia:370},
+        tablaFoil: {hora:220,dia:410}
+      }
+    }
+  },
+  extras: {protectorSolar:115, lycras:180, cuipe:80}
+};
 
-function crearPrimeraOpcion(){agregarOpcion();}
-function agregarOpcion(){if(document.querySelectorAll('.tab').length>=5){alert('Máximo 5 opciones');return;}optionCounter++;const id=optionCounter;const tc=document.getElementById('tabsContainer');const nt=document.createElement('div');nt.className=document.querySelectorAll('.tab').length===0?'tab active':'tab';nt.setAttribute('data-option',id);nt.innerHTML=`Opción ${id}<div class="remove-tab">×</div>`;nt.addEventListener('click',function(e){if(!e.target.classList.contains('remove-tab'))cambiarOpcion(id);});nt.querySelector('.remove-tab').addEventListener('click',function(e){e.stopPropagation();eliminarOpcion(id);});tc.appendChild(nt);const oc=document.getElementById('optionsContainer');const opt=document.createElement('div');opt.className=document.querySelectorAll('.option-content').length===0?'option-content active':'option-content';opt.id=`option-${id}`;opt.innerHTML=crearContenidoOpcion(id);oc.appendChild(opt);configurarEventos(id);if(document.querySelectorAll('.tab').length>1)cambiarOpcion(id);}
+let precios = JSON.parse(JSON.stringify(preciosDefault));
+let optionCounter = 0, currentLanguage = 'pt';
 
-function crearContenidoOpcion(id){return`<div class="section"><div class="section-title">📅 Temporada & Grupo</div><div class="form-group"><label>Temporada</label><div class="radio-group" style="grid-template-columns:repeat(3,1fr)"><div class="radio-option"><input type="radio" name="temporada-${id}" value="LOW" id="temp-low-${id}"><label for="temp-low-${id}">LOW</label></div><div class="radio-option"><input type="radio" name="temporada-${id}" value="MID" id="temp-mid-${id}"><label for="temp-mid-${id}">MID</label></div><div class="radio-option"><input type="radio" name="temporada-${id}" value="HIGH" id="temp-high-${id}"><label for="temp-high-${id}">HIGH</label></div></div><div class="info-text"><strong>HIGH:</strong> Jul-Nov + Año Nuevo + Carnaval<br><strong>MID:</strong> May-Jun + Dic + Ene<br><strong>LOW:</strong> Feb-Mar</div></div><div class="form-group"><label>Personas (1-3)</label><input type="number" id="personas-${id}" min="1" max="3" value="1"></div></div><div class="section"><div class="section-title">🏠 Hospedaje</div><div class="form-group"><label>Habitación</label><div class="radio-group"><div class="radio-option"><input type="radio" name="habitacion-${id}" value="Compartida 8 camas" id="hab-comp8-${id}"><label for="hab-comp8-${id}">Compartida 8</label></div><div class="radio-option"><input type="radio" name="habitacion-${id}" value="Compartida 4 camas" id="hab-comp4-${id}"><label for="hab-comp4-${id}">Compartida 4</label></div><div class="radio-option"><input type="radio" name="habitacion-${id}" value="Privada sin aire" id="hab-priv-${id}"><label for="hab-priv-${id}">Privada s/aire</label></div><div class="radio-option"><input type="radio" name="habitacion-${id}" value="Privada con aire" id="hab-aire-${id}"><label for="hab-aire-${id}">Privada c/aire</label></div></div></div><div class="form-group"><label>Noches</label><input type="number" id="noches-${id}" min="1" value="1"></div><div class="form-group"><label>¿Desayuno?</label><div class="radio-group"><div class="radio-option"><input type="radio" name="desayuno-${id}" value="si" id="desayuno-si-${id}"><label for="desayuno-si-${id}">Sí</label></div><div class="radio-option"><input type="radio" name="desayuno-${id}" value="no" id="desayuno-no-${id}" checked><label for="desayuno-no-${id}">No</label></div></div></div></div><div class="section"><div class="section-title">🪁 Clases</div><div class="form-group"><label>¿Clases?</label><div class="radio-group"><div class="radio-option"><input type="radio" name="quiereClases-${id}" value="si" id="clases-si-${id}"><label for="clases-si-${id}">Sí</label></div><div class="radio-option"><input type="radio" name="quiereClases-${id}" value="no" id="clases-no-${id}" checked><label for="clases-no-${id}">No</label></div></div></div><div id="clasesOpciones-${id}" class="hidden"><div class="form-group"><label>Deporte</label><select id="deporte-${id}"><option value="">Seleccionar</option><option value="Kite">Kite</option><option value="Wing">Wing</option></select></div><div class="form-group"><label>Producto</label><div class="radio-group" style="grid-template-columns:repeat(3,1fr)"><div class="radio-option"><input type="radio" name="productoClase-${id}" value="Hora suelta" id="prod-hora-${id}"><label for="prod-hora-${id}">Hora</label></div><div class="radio-option"><input type="radio" name="productoClase-${id}" value="Pack 10h" id="prod-pack-${id}"><label for="prod-pack-${id}">Pack 10h</label></div><div class="radio-option"><input type="radio" name="productoClase-${id}" value="Avanzadas" id="prod-avanzadas-${id}"><label for="prod-avanzadas-${id}">Avanzada</label></div></div></div><div class="form-group" id="horasClaseContainer-${id}" style="display:none"><label>Horas</label><input type="number" id="horasClase-${id}" min="1" value="2" style="width:100px"></div></div></div><div class="section"><div class="section-title">🧰 Rental</div><div class="form-group"><label>¿Rental?</label><div class="radio-group"><div class="radio-option"><input type="radio" name="quiereRental-${id}" value="si" id="rental-si-${id}"><label for="rental-si-${id}">Sí</label></div><div class="radio-option"><input type="radio" name="quiereRental-${id}" value="no" id="rental-no-${id}" checked><label for="rental-no-${id}">No</label></div></div></div><div id="rentalOpciones-${id}" class="hidden"><div class="form-group"><label>Deporte</label><select id="deporteRental-${id}"><option value="">Seleccionar</option><option value="Kite">Kite</option><option value="Wing">Wing</option></select></div><div id="rentalKiteOpciones-${id}" class="hidden"><div class="form-group"><label>Equipo</label><div class="rental-checkboxes"><div class="checkbox-container"><input type="checkbox" id="rental-kite-completo-${id}" value="completo"><label for="rental-kite-completo-${id}">Completo</label></div><div class="checkbox-container"><input type="checkbox" id="rental-kite-soloKite-${id}" value="soloKite"><label for="rental-kite-soloKite-${id}">Solo Kite</label></div><div class="checkbox-container"><input type="checkbox" id="rental-kite-soloTabla-${id}" value="soloTabla"><label for="rental-kite-soloTabla-${id}">Solo Tabla</label></div><div class="checkbox-container"><input type="checkbox" id="rental-kite-soloArnes-${id}" value="soloArnes"><label for="rental-kite-soloArnes-${id}">Solo Arnés</label></div></div></div></div><div id="rentalWingOpciones-${id}" class="hidden"><div class="form-group"><label>Equipo</label><div class="rental-checkboxes"><div class="checkbox-container"><input type="checkbox" id="rental-wing-completo-${id}" value="completo"><label for="rental-wing-completo-${id}">Completo</label></div><div class="checkbox-container"><input type="checkbox" id="rental-wing-soloWing-${id}" value="soloWing"><label for="rental-wing-soloWing-${id}">Solo Wing</label></div><div class="checkbox-container"><input type="checkbox" id="rental-wing-soloTabla-${id}" value="soloTabla"><label for="rental-wing-soloTabla-${id}">Solo Tabla</label></div></div></div></div><div class="rental-grid"><div class="form-group"><label>Duración</label><select id="duracionRental-${id}"><option value="">Seleccionar</option><option value="1h">1h</option><option value="3h">3h</option><option value="fullday">Full Day</option></select></div><div class="form-group"><label>Días</label><input type="number" id="diasRental-${id}" min="1" value="1"></div></div><div class="info-text" id="rentalDescuento-${id}" style="display:none">💡 Kite: ${precios.school.kite.rentalDiscountPercent}% dto si > ${precios.school.kite.rentalDiscountThreshold} días</div></div></div><div class="section"><div class="section-title">🛍️ Extras</div><div class="form-group"><div style="display:grid;gap:10px"><div class="checkbox-container"><input type="checkbox" id="protectorSolar-${id}"><label for="protectorSolar-${id}" id="label-protector-${id}">Protector Solar (R$ ${precios.extras.protectorSolar})</label></div><div class="checkbox-container"><input type="checkbox" id="lycras-${id}"><label for="lycras-${id}" id="label-lycras-${id}">Lycras (R$ ${precios.extras.lycras})</label></div><div class="checkbox-container"><input type="checkbox" id="cuipe-${id}"><label for="cuipe-${id}" id="label-cuipe-${id}">Tarde en Cuipe (R$ ${precios.extras.cuipe})</label></div></div></div></div><div class="result-box"><div class="result-item"><span>💰 Total Opción ${id}:</span><span id="total-preview-${id}">R$ 0</span></div></div>`;}
+// ── Cálculos ──────────────────────────────────────────────────────────────────
 
-function configurarEventos(id){document.querySelectorAll(`input[name="quiereClases-${id}"]`).forEach(r=>r.addEventListener('change',function(){document.getElementById(`clasesOpciones-${id}`).classList.toggle('hidden',this.value!=='si');actualizarPreview(id);}));document.querySelectorAll(`input[name="quiereRental-${id}"]`).forEach(r=>r.addEventListener('change',function(){document.getElementById(`rentalOpciones-${id}`).classList.toggle('hidden',this.value!=='si');actualizarPreview(id);}));document.querySelectorAll(`input[name="productoClase-${id}"]`).forEach(r=>r.addEventListener('change',function(){document.getElementById(`horasClaseContainer-${id}`).style.display=(this.value==='Hora suelta'||this.value==='Avanzadas')?'block':'none';actualizarPreview(id);}));const dr=document.getElementById(`deporteRental-${id}`);if(dr)dr.addEventListener('change',function(){document.getElementById(`rentalKiteOpciones-${id}`).classList.add('hidden');document.getElementById(`rentalWingOpciones-${id}`).classList.add('hidden');document.getElementById(`rentalDescuento-${id}`).style.display='none';if(this.value==='Kite'){document.getElementById(`rentalKiteOpciones-${id}`).classList.remove('hidden');document.getElementById(`rentalDescuento-${id}`).style.display='block';}else if(this.value==='Wing'){document.getElementById(`rentalWingOpciones-${id}`).classList.remove('hidden');}actualizarPreview(id);});document.querySelectorAll(`#option-${id} input, #option-${id} select`).forEach(el=>{el.addEventListener('change',()=>actualizarPreview(id));el.addEventListener('input',()=>actualizarPreview(id));});}
+function calcularHospedaje(d, cfg) {
+  const {temporada, habitacion, noches, personas, desayuno} = d;
+  const items = [], l = cfg.lodging;
+  let total = 0;
+  if (!temporada || !habitacion || !noches) return {items, total};
 
-function cambiarOpcion(id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));const tt=document.querySelector(`[data-option="${id}"]`);if(tt)tt.classList.add('active');document.querySelectorAll('.option-content').forEach(c=>c.classList.remove('active'));const tc=document.getElementById(`option-${id}`);if(tc)tc.classList.add('active');}
+  const habMap = {
+    'Compartida 8 (Aire)': l.compartida8,
+    'Compartida Vent.':     l.compartidaVent,
+    'Compartida Aire (Fem)':l.compartidaAire
+  };
+  const compartidaConf = habMap[habitacion];
+  if (compartidaConf) {
+    const pn = compartidaConf[temporada] || 0;
+    const s = pn * personas * noches;
+    items.push({label:`${habitacion} (${personas}p)`, qty:noches, unit:'noches', unitPrice:pn*personas, subtotal:s});
+    total += s;
+  } else if (habitacion === 'Privada s/Aire') {
+    const pn = l.privadaSinAire[personas]?.[temporada] || 0;
+    const s = pn * noches;
+    items.push({label:`Privada s/Aire (${personas}p)`, qty:noches, unit:'noches', unitPrice:pn, subtotal:s});
+    total += s;
+  } else if (habitacion === 'Privada c/Aire') {
+    const pn = l.privadaConAire[personas]?.[temporada] || 0;
+    const s = pn * noches;
+    items.push({label:`Privada c/Aire Suite (${personas}p)`, qty:noches, unit:'noches', unitPrice:pn, subtotal:s});
+    total += s;
+  }
 
-function eliminarOpcion(id){if(document.querySelectorAll('.tab').length<=1){alert('Mínimo 1 opción');return;}const t=document.querySelector(`[data-option="${id}"]`);const c=document.getElementById(`option-${id}`);if(t)t.remove();if(c)c.remove();const ft=document.querySelector('.tab');if(ft)cambiarOpcion(parseInt(ft.getAttribute('data-option')));}
+  if (desayuno === 'si') {
+    const pd = l.desayuno, sd = pd * personas * noches;
+    items.push({label:`Desayuno (${personas}p)`, qty:noches, unit:'noches', unitPrice:pd*personas, subtotal:sd});
+    total += sd;
+  }
+  return {items, total};
+}
 
-function actualizarPreview(id){const d=obtenerDatosOpcion(id);const p=document.getElementById(`total-preview-${id}`);if(p)p.textContent=`R$ ${d.grandTotal}`;}
+function calcularClases(d, cfg) {
+  const {quiereClases, deporte, productoClase, horasClase, temporada, tieneHospedaje} = d;
+  const items = [];
+  let total = 0;
+  if (quiereClases !== 'si' || !deporte || !productoClase) return {items, total, descripcion:''};
 
-function obtenerDatosOpcion(id){const temporada=document.querySelector(`input[name="temporada-${id}"]:checked`)?.value||null;const personas=parseInt(document.getElementById(`personas-${id}`)?.value)||1;const habitacion=document.querySelector(`input[name="habitacion-${id}"]:checked`)?.value||null;const noches=parseInt(document.getElementById(`noches-${id}`)?.value)||1;const desayuno=document.querySelector(`input[name="desayuno-${id}"]:checked`)?.value||'no';const quiereClases=document.querySelector(`input[name="quiereClases-${id}"]:checked`)?.value||'no';const deporte=document.getElementById(`deporte-${id}`)?.value||'';const productoClase=document.querySelector(`input[name="productoClase-${id}"]:checked`)?.value||null;const horasClase=parseInt(document.getElementById(`horasClase-${id}`)?.value)||1;const quiereRental=document.querySelector(`input[name="quiereRental-${id}"]:checked`)?.value||'no';const deporteRental=document.getElementById(`deporteRental-${id}`)?.value||'';const duracionRental=document.getElementById(`duracionRental-${id}`)?.value||'';const diasRental=parseInt(document.getElementById(`diasRental-${id}`)?.value)||1;let rentalItems=[];if(deporteRental==='Kite'){if(document.getElementById(`rental-kite-completo-${id}`)?.checked)rentalItems.push('completo');if(document.getElementById(`rental-kite-soloKite-${id}`)?.checked)rentalItems.push('soloKite');if(document.getElementById(`rental-kite-soloTabla-${id}`)?.checked)rentalItems.push('soloTabla');if(document.getElementById(`rental-kite-soloArnes-${id}`)?.checked)rentalItems.push('soloArnes');}else if(deporteRental==='Wing'){if(document.getElementById(`rental-wing-completo-${id}`)?.checked)rentalItems.push('completo');if(document.getElementById(`rental-wing-soloWing-${id}`)?.checked)rentalItems.push('soloWing');if(document.getElementById(`rental-wing-soloTabla-${id}`)?.checked)rentalItems.push('soloTabla');}const protectorSolar=document.getElementById(`protectorSolar-${id}`)?.checked||false;const lycras=document.getElementById(`lycras-${id}`)?.checked||false;const cuipe=document.getElementById(`cuipe-${id}`)?.checked||false;const dH={temporada,habitacion,noches,personas,desayuno};const dC={quiereClases,deporte,productoClase,horasClase};const dR={quiereRental,deporteRental,duracionRental,diasRental,rentalItems};const dE={protectorSolar,lycras,cuipe};const rH=calcularHospedaje(dH,precios);const rC=calcularClases(dC,precios);const rR=calcularRental(dR,precios);const rE=calcularExtras(dE,precios);const grandTotal=rH.total+rC.total+rR.total+rE.total;const tieneServInd=rC.total>0||rR.total>0||rE.total>0;return{temporada,personas,habitacion,noches,desayuno,hospedaje:rH,clases:rC,rental:rR,extras:rE,grandTotal,tieneServInd};}
+  const sc = cfg.school;
+  const dep = deporte.toLowerCase();
+  const tefec = (temporada === 'HIGH' || temporada === 'AÑONUEVO') ? 'HIGH' : 'MID';
+  const tp = tieneHospedaje ? 'h' : 'nh';
 
-function generarComparacion(){const nombre=document.getElementById('nombreLeadGlobal').value;if(!nombre){alert('Ingresa nombre del lead');return;}const ops=[];document.querySelectorAll('.option-content').forEach(c=>{const id=parseInt(c.id.split('-')[1]);const d=obtenerDatosOpcion(id);if(d.hospedaje.total>0||d.clases.total>0||d.rental.total>0||d.extras.total>0)ops.push({id,data:d});});if(ops.length===0){alert('Completa al menos una opción');return;}crearMensajePT(nombre,ops);crearMensajeES(nombre,ops);crearMensajeEN(nombre,ops);document.getElementById('resultadoComparador').classList.remove('hidden');document.getElementById('resultadoComparador').scrollIntoView({behavior:'smooth'});}
+  let desc = '';
+  if (productoClase === 'Hora suelta' || productoClase === 'Avanzadas') {
+    const h = horasClase || 1;
+    const up = sc[dep].horaSuelta[tefec][tp];
+    const st = up * h;
+    const lbl = productoClase === 'Avanzadas' ? `Clase ${deporte} Avanzada` : `Clase ${deporte} (hora suelta)`;
+    items.push({label:lbl, qty:h, unit:'horas', unitPrice:up, subtotal:st, isPerPerson:true});
+    total = st;
+    desc = `${deporte} ${h}h${productoClase==='Avanzadas'?' avanzada':''}${tieneHospedaje?' (huésped)':''}`;
+  } else if (productoClase === 'Pack 10h') {
+    const up = sc[dep].pack10h[tefec][tp];
+    items.push({label:`Clase ${deporte} Pack 10h`, qty:1, unit:'pack', unitPrice:up, subtotal:up, isPerPerson:true});
+    total = up;
+    desc = `${deporte} Pack 10h${tieneHospedaje?' (huésped)':''}`;
+  }
+  return {items, total, descripcion:desc};
+}
 
-function fmtLine(item,lang){const u={pt:{noches:'noites',horas:'horas',días:'dias',pack:'pack',un:'un'},es:{noches:'noches',horas:'horas',días:'días',pack:'pack',un:'un'},en:{noches:'nights',horas:'hours',días:'days',pack:'pack',un:'un'}};const l=u[lang];let ul=item.unit;if(l[item.unit])ul=l[item.unit];return`   • ${item.label}: ${item.qty} ${ul} × R$ ${item.unitPrice} = R$ ${item.subtotal}`;}
+function calcularRental(d, cfg) {
+  const {quiereRental, deporteRental, duracionRental, diasRental, rentalItems} = d;
+  const items = [];
+  let total = 0;
+  if (quiereRental !== 'si' || !deporteRental || !duracionRental || !rentalItems || rentalItems.length === 0)
+    return {items, total, descripcion:''};
 
-const payLeg={pt:`\n💳 *Pagamento:*\n   • 15% dto em dinheiro\n   • 10% dto via Wise/Revolut`,es:`\n💳 *Pago:*\n   • 15% dto en efectivo\n   • 10% dto vía Wise/Revolut`,en:`\n💳 *Payment:*\n   • 15% off cash\n   • 10% off via Wise/Revolut`};
-const indNote={pt:`\n⚠️ *Nota:* Preço das aulas é por pessoa. Extras e rentals também são por pessoa.`,es:`\n⚠️ *Nota:* Precio de clases es por persona. Extras y rentals también son por persona.`,en:`\n⚠️ *Note:* Lesson price is per person. Extras and rentals are also per person.`};
+  const sc = cfg.school;
+  const dep = deporteRental.toLowerCase();
+  const durLabels = {sesion:'Sesión',dia1:'1 Día',dias3:'3+ Días',dias5:'5+ Días',hora:'Por Hora',dia:'Día Completo'};
+  const durTxt = durLabels[duracionRental] || duracionRental;
+  const tipoLabels = {completo:'Eq. Completo',soloKite:'Solo Kite',soloTabla:'Solo Tabla',soloArnes:'Solo Arnés',soloWing:'Solo Wing',tablaFoil:'Tabla+Foil'};
 
-function crearMensajePT(nombre,ops){let m=`Olá ${nombre}! 👋\nMontei ${ops.length>1?'algumas propostas':'uma proposta'} para Indiana Kite 🌬️\n\n━━━━━━━━━━━━━━━━━━━━\n`;ops.forEach((op,i)=>{const d=op.data;m+=`\n✨ *OPÇÃO ${op.id}:*\n`;if(d.hospedaje.items.length>0){m+=`\n🏠 *Hospedagem:*\n`;d.hospedaje.items.forEach(it=>{const ipt={...it,label:it.label.replace('Desayuno','Café da manhã')};m+=fmtLine(ipt,'pt')+'\n';});}if(d.clases.items.length>0){m+=`\n🪁 *Aulas:*\n`;d.clases.items.forEach(it=>{const ipt={...it,label:it.label.replace('Clase','Aula').replace('hora suelta','hora avulsa').replace('Avanzada','Avançada')};m+=fmtLine(ipt,'pt')+'\n';});}if(d.rental.items.length>0){m+=`\n🧰 *Rental:*\n`;d.rental.items.forEach(it=>{const ipt={...it,label:it.label.replace('Equipo Completo','Equipamento Completo').replace('Solo Kite','Só Kite').replace('Solo Tabla','Só Prancha').replace('Solo Arnés','Só Trapézio').replace('Solo Wing','Só Wing').replace('Full Day','Dia Inteiro')};m+=fmtLine(ipt,'pt')+'\n';});if(d.rental.descuentoTotal>0)m+=`   🎉 Desconto: -R$ ${d.rental.descuentoTotal}\n`;}if(d.extras.items.length>0){m+=`\n🛍️ *Extras:*\n`;d.extras.items.forEach(it=>{const ipt={...it,label:it.label.replace('Protector Solar','Protetor Solar').replace('Tarde en Cuipe','Tarde em Cuipe')};m+=fmtLine(ipt,'pt')+'\n';});}m+=`\n💰 *TOTAL: R$ ${d.grandTotal}*\n`;if(d.personas>1&&d.tieneServInd)m+=indNote.pt;if(i<ops.length-1)m+=`\n━━━━━━━━━━━━━━━━━━━━`;});m+=payLeg.pt+`\n\n📌 Sujeito a disponibilidade.\n\nMe conta o que você achou e vemos juntos qual opção funciona melhor pra você. 🤙`;document.getElementById('mensajePT').textContent=m;}
+  rentalItems.forEach(tipo => {
+    const pb = sc[dep]?.rental?.[tipo]?.[duracionRental] || 0;
+    if (pb > 0) {
+      const st = pb * diasRental;
+      items.push({label:`Rental ${deporteRental} ${tipoLabels[tipo]||tipo} (${durTxt})`, qty:diasRental, unit:'días', unitPrice:pb, subtotal:st, isPerPerson:true});
+      total += st;
+    }
+  });
 
-function crearMensajeES(nombre,ops){let m=`Hola ${nombre}! 👋\nTe armé ${ops.length>1?'algunas propuestas':'una propuesta'} para Indiana Kite 🌬️\n\n━━━━━━━━━━━━━━━━━━━━\n`;ops.forEach((op,i)=>{const d=op.data;m+=`\n✨ *OPCIÓN ${op.id}:*\n`;if(d.hospedaje.items.length>0){m+=`\n🏠 *Hospedaje:*\n`;d.hospedaje.items.forEach(it=>m+=fmtLine(it,'es')+'\n');}if(d.clases.items.length>0){m+=`\n🪁 *Clases:*\n`;d.clases.items.forEach(it=>m+=fmtLine(it,'es')+'\n');}if(d.rental.items.length>0){m+=`\n🧰 *Rental:*\n`;d.rental.items.forEach(it=>m+=fmtLine(it,'es')+'\n');if(d.rental.descuentoTotal>0)m+=`   🎉 Descuento: -R$ ${d.rental.descuentoTotal}\n`;}if(d.extras.items.length>0){m+=`\n🛍️ *Extras:*\n`;d.extras.items.forEach(it=>m+=fmtLine(it,'es')+'\n');}m+=`\n💰 *TOTAL: R$ ${d.grandTotal}*\n`;if(d.personas>1&&d.tieneServInd)m+=indNote.es;if(i<ops.length-1)m+=`\n━━━━━━━━━━━━━━━━━━━━`;});m+=payLeg.es+`\n\n📌 Sujeto a disponibilidad.\n\nContame qué te parece y vemos juntos qué opción te conviene más. 🤙`;document.getElementById('mensajeES').textContent=m;}
+  const tiposTxt = rentalItems.map(t=>({completo:'Completo',soloKite:'Kite',soloTabla:'Tabla',soloArnes:'Arnés',soloWing:'Wing',tablaFoil:'Foil'}[t]||t)).join('+');
+  return {items, total, descripcion:`Rental ${deporteRental} ${tiposTxt} ${durTxt} ×${diasRental}d`};
+}
 
-function crearMensajeEN(nombre,ops){let m=`Hi ${nombre}! 👋\nI put together ${ops.length>1?'some options':'an option'} for Indiana Kite 🌬️\n\n━━━━━━━━━━━━━━━━━━━━\n`;ops.forEach((op,i)=>{const d=op.data;m+=`\n✨ *OPTION ${op.id}:*\n`;if(d.hospedaje.items.length>0){m+=`\n🏠 *Accommodation:*\n`;d.hospedaje.items.forEach(it=>{const ien={...it,label:it.label.replace('Compartida 8 camas','Shared 8 beds').replace('Compartida 4 camas','Shared 4 beds').replace('Privada sin aire','Private no AC').replace('Privada con aire','Private with AC').replace('Desayuno','Breakfast')};m+=fmtLine(ien,'en')+'\n';});}if(d.clases.items.length>0){m+=`\n🪁 *Lessons:*\n`;d.clases.items.forEach(it=>{const ien={...it,label:it.label.replace('Clase','Lesson').replace('hora suelta','single hour').replace('Avanzada','Advanced')};m+=fmtLine(ien,'en')+'\n';});}if(d.rental.items.length>0){m+=`\n🧰 *Rental:*\n`;d.rental.items.forEach(it=>{const ien={...it,label:it.label.replace('Equipo Completo','Full Equipment').replace('Solo Kite','Kite Only').replace('Solo Tabla','Board Only').replace('Solo Arnés','Harness Only').replace('Solo Wing','Wing Only')};m+=fmtLine(ien,'en')+'\n';});if(d.rental.descuentoTotal>0)m+=`   🎉 Discount: -R$ ${d.rental.descuentoTotal}\n`;}if(d.extras.items.length>0){m+=`\n🛍️ *Extras:*\n`;d.extras.items.forEach(it=>{const ien={...it,label:it.label.replace('Protector Solar','Sunscreen').replace('Tarde en Cuipe','BBQ at Cuipe')};m+=fmtLine(ien,'en')+'\n';});}m+=`\n💰 *TOTAL: R$ ${d.grandTotal}*\n`;if(d.personas>1&&d.tieneServInd)m+=indNote.en;if(i<ops.length-1)m+=`\n━━━━━━━━━━━━━━━━━━━━`;});m+=payLeg.en+`\n\n📌 Subject to availability.\n\nLet me know what you think and we’ll figure out together which option works best for you.
- 🤙`;document.getElementById('mensajeEN').textContent=m;}
+function calcularExtras(d, cfg) {
+  const {protectorSolar, lycras, cuipe} = d;
+  const e = cfg.extras;
+  const items = [];
+  let total = 0;
+  if (protectorSolar) {items.push({label:'Protector Solar',qty:1,unit:'un',unitPrice:e.protectorSolar,subtotal:e.protectorSolar,isPerPerson:true});total+=e.protectorSolar;}
+  if (lycras) {items.push({label:'Lycras',qty:1,unit:'un',unitPrice:e.lycras,subtotal:e.lycras,isPerPerson:true});total+=e.lycras;}
+  if (cuipe) {items.push({label:'Tarde en Cuipe',qty:1,unit:'un',unitPrice:e.cuipe,subtotal:e.cuipe,isPerPerson:true});total+=e.cuipe;}
+  return {items, total};
+}
 
-function cambiarIdioma(lang){currentLanguage=lang;document.querySelectorAll('.language-tab').forEach(t=>{t.classList.remove('active');if(t.getAttribute('data-lang')===lang)t.classList.add('active');});document.querySelectorAll('.whatsapp-message').forEach(m=>m.classList.remove('active'));document.getElementById(`mensaje${lang.toUpperCase()}`).classList.add('active');}
+// ── UI principal ──────────────────────────────────────────────────────────────
 
-function copiarMensaje(){let m='';if(currentLanguage==='pt')m=document.getElementById('mensajePT').textContent;else if(currentLanguage==='es')m=document.getElementById('mensajeES').textContent;else m=document.getElementById('mensajeEN').textContent;navigator.clipboard.writeText(m).then(()=>{const b=document.getElementById('copiarBtn');b.textContent='✓ Copiado!';setTimeout(()=>{b.textContent='Copiar mensaje'},2000);});}
-    </script>
+window.addEventListener('DOMContentLoaded', function() {
+  cargarPreciosGuardados();
+  crearPrimeraOpcion();
+  document.getElementById('addOptionBtn').addEventListener('click', agregarOpcion);
+  document.getElementById('generarBtn').addEventListener('click', generarComparacion);
+  document.getElementById('copiarBtn').addEventListener('click', copiarMensaje);
+  document.getElementById('guardarPreciosBtn').addEventListener('click', guardarPrecios);
+  document.getElementById('resetPreciosBtn').addEventListener('click', resetearPrecios);
+  document.querySelectorAll('.language-tab').forEach(t=>t.addEventListener('click',function(){cambiarIdioma(this.getAttribute('data-lang'));}));
+  document.querySelectorAll('.main-tab').forEach(t=>t.addEventListener('click',function(){cambiarModo(this.getAttribute('data-mode'),this);}));
+});
+
+function cambiarModo(modo, el) {
+  document.querySelectorAll('.main-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const isCot = modo === 'cotizador';
+  document.getElementById('modoCotizador').classList.toggle('hidden', !isCot);
+  document.getElementById('modoSettings').classList.toggle('hidden', isCot);
+  document.getElementById('stickyBar').classList.toggle('hidden', !isCot);
+  document.getElementById('resultadoComparador').classList.add('hidden');
+  if (!isCot) sincronizarInputsPrecios();
+  else actualizarLabelsExtras();
+}
+
+function actualizarLabelsExtras() {
+  document.querySelectorAll('.option-content').forEach(c => {
+    const id = c.id.split('-')[1];
+    const lp = document.getElementById(`label-prot-${id}`);
+    const ll = document.getElementById(`label-lyc-${id}`);
+    const lc = document.getElementById(`label-cuipe-${id}`);
+    if (lp) lp.textContent = `Protector Solar (R$ ${precios.extras.protectorSolar})`;
+    if (ll) ll.textContent = `Lycras (R$ ${precios.extras.lycras})`;
+    if (lc) lc.textContent = `Tarde en Cuipe (R$ ${precios.extras.cuipe})`;
+  });
+}
+
+function crearPrimeraOpcion() { agregarOpcion(); }
+
+function agregarOpcion() {
+  if (document.querySelectorAll('.tab').length >= 5) {alert('Máximo 5 opciones'); return;}
+  optionCounter++;
+  const id = optionCounter;
+  const tc = document.getElementById('tabsContainer');
+  const nt = document.createElement('div');
+  nt.className = document.querySelectorAll('.tab').length === 0 ? 'tab active' : 'tab';
+  nt.setAttribute('data-option', id);
+  nt.innerHTML = `Opción ${id}<div class="remove-tab">×</div>`;
+  nt.addEventListener('click', function(e) { if (!e.target.classList.contains('remove-tab')) cambiarOpcion(id); });
+  nt.querySelector('.remove-tab').addEventListener('click', function(e) { e.stopPropagation(); eliminarOpcion(id); });
+  tc.appendChild(nt);
+
+  const oc = document.getElementById('optionsContainer');
+  const opt = document.createElement('div');
+  opt.className = document.querySelectorAll('.option-content').length === 0 ? 'option-content active' : 'option-content';
+  opt.id = `option-${id}`;
+  opt.innerHTML = crearContenidoOpcion(id);
+  oc.appendChild(opt);
+  configurarEventos(id);
+  if (document.querySelectorAll('.tab').length > 1) cambiarOpcion(id);
+  else syncStickyTotal(id);
+}
+
+function crearContenidoOpcion(id) {
+  const hc = ['c1','c2','c3','c4','c5'][(id - 1) % 5];
+  return `
+  <div class="option-card">
+    <div class="option-card-header ${hc}">Opción ${id}</div>
+    <div class="option-card-body">
+      <div class="form-section">
+        <div class="section-title">Temporada & Pago</div>
+        <div class="form-group">
+          <label>Temporada</label>
+          <div class="radio-group-4">
+            <div class="radio-option"><input type="radio" name="temp-${id}" value="LOW" id="t-low-${id}"><label for="t-low-${id}">LOW<br><small>Feb–Mar</small></label></div>
+            <div class="radio-option"><input type="radio" name="temp-${id}" value="MID" id="t-mid-${id}"><label for="t-mid-${id}">MID<br><small>May–Jun, Dic</small></label></div>
+            <div class="radio-option"><input type="radio" name="temp-${id}" value="HIGH" id="t-high-${id}"><label for="t-high-${id}">HIGH<br><small>Jul–Nov</small></label></div>
+            <div class="radio-option"><input type="radio" name="temp-${id}" value="AÑONUEVO" id="t-an-${id}"><label for="t-an-${id}">AÑO NUEVO</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Forma de pago</label>
+          <div class="radio-group">
+            <div class="radio-option"><input type="radio" name="pago-${id}" value="tarjeta" id="pago-t-${id}" checked><label for="pago-t-${id}">💳 Tarjeta</label></div>
+            <div class="radio-option pago-efectivo"><input type="radio" name="pago-${id}" value="efectivo" id="pago-e-${id}"><label for="pago-e-${id}">💵 Efectivo / Pix<br><small>(-10%)</small></label></div>
+          </div>
+        </div>
+        <div class="form-group"><label>Personas (1–3)</label><input type="number" id="pers-${id}" min="1" max="3" value="1"></div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Hospedaje</div>
+        <div class="form-group">
+          <label>Habitación</label>
+          <div class="radio-group-5">
+            <div class="radio-option"><input type="radio" name="hab-${id}" value="Compartida 8 (Aire)" id="h-c8-${id}"><label for="h-c8-${id}">Comp. 8 · Aire</label></div>
+            <div class="radio-option"><input type="radio" name="hab-${id}" value="Compartida Vent." id="h-cv-${id}"><label for="h-cv-${id}">Comp. Ventilador</label></div>
+            <div class="radio-option"><input type="radio" name="hab-${id}" value="Compartida Aire (Fem)" id="h-ca-${id}"><label for="h-ca-${id}">Comp. Fem · Aire</label></div>
+            <div class="radio-option"><input type="radio" name="hab-${id}" value="Privada s/Aire" id="h-psa-${id}"><label for="h-psa-${id}">Privada s/Aire</label></div>
+            <div class="radio-option"><input type="radio" name="hab-${id}" value="Privada c/Aire" id="h-pca-${id}"><label for="h-pca-${id}">Privada c/Aire Suite</label></div>
+          </div>
+        </div>
+        <div class="form-group"><label>Noches</label><input type="number" id="noches-${id}" min="1" value="1"></div>
+        <div class="form-group">
+          <label>¿Desayuno?</label>
+          <div class="radio-group">
+            <div class="radio-option"><input type="radio" name="des-${id}" value="si" id="des-si-${id}"><label for="des-si-${id}">Sí (+R$ ${precios.lodging.desayuno}/p)</label></div>
+            <div class="radio-option"><input type="radio" name="des-${id}" value="no" id="des-no-${id}" checked><label for="des-no-${id}">No</label></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Clases</div>
+        <div class="form-group">
+          <label>¿Clases?</label>
+          <div class="radio-group">
+            <div class="radio-option"><input type="radio" name="clases-${id}" value="si" id="cl-si-${id}"><label for="cl-si-${id}">Sí</label></div>
+            <div class="radio-option"><input type="radio" name="clases-${id}" value="no" id="cl-no-${id}" checked><label for="cl-no-${id}">No</label></div>
+          </div>
+        </div>
+        <div id="clasesOpc-${id}" class="hidden">
+          <div class="form-group">
+            <label>Deporte</label>
+            <select id="dep-${id}"><option value="">Seleccionar</option><option value="Kite">Kite</option><option value="Wing">Wing</option></select>
+          </div>
+          <div class="form-group">
+            <label>Producto</label>
+            <div class="radio-group" style="grid-template-columns:repeat(3,1fr)">
+              <div class="radio-option"><input type="radio" name="prod-${id}" value="Hora suelta" id="pr-h-${id}"><label for="pr-h-${id}">Hora</label></div>
+              <div class="radio-option"><input type="radio" name="prod-${id}" value="Pack 10h" id="pr-p-${id}"><label for="pr-p-${id}">Pack 10h</label></div>
+              <div class="radio-option"><input type="radio" name="prod-${id}" value="Avanzadas" id="pr-a-${id}"><label for="pr-a-${id}">Avanzada</label></div>
+            </div>
+          </div>
+          <div class="form-group" id="hrsClaseC-${id}" style="display:none">
+            <label>Horas</label><input type="number" id="hrs-${id}" min="1" value="2" style="width:100px">
+          </div>
+          <div class="info-text green" id="huesp-note-${id}" style="display:none">Precio huésped aplicado (con hospedaje incluido)</div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Rental</div>
+        <div class="form-group">
+          <label>¿Rental?</label>
+          <div class="radio-group">
+            <div class="radio-option"><input type="radio" name="rental-${id}" value="si" id="ren-si-${id}"><label for="ren-si-${id}">Sí</label></div>
+            <div class="radio-option"><input type="radio" name="rental-${id}" value="no" id="ren-no-${id}" checked><label for="ren-no-${id}">No</label></div>
+          </div>
+        </div>
+        <div id="rentalOpc-${id}" class="hidden">
+          <div class="form-group">
+            <label>Deporte</label>
+            <select id="depR-${id}"><option value="">Seleccionar</option><option value="Kite">Kite</option><option value="Wing">Wing</option></select>
+          </div>
+          <div id="renKite-${id}" class="hidden">
+            <div class="form-group">
+              <label>Equipo</label>
+              <div class="rental-checkboxes">
+                <div class="checkbox-container"><input type="checkbox" id="rk-comp-${id}" value="completo"><label for="rk-comp-${id}">Eq. Completo</label></div>
+                <div class="checkbox-container"><input type="checkbox" id="rk-kite-${id}" value="soloKite"><label for="rk-kite-${id}">Solo Kite</label></div>
+                <div class="checkbox-container"><input type="checkbox" id="rk-tabla-${id}" value="soloTabla"><label for="rk-tabla-${id}">Solo Tabla</label></div>
+                <div class="checkbox-container"><input type="checkbox" id="rk-arnes-${id}" value="soloArnes"><label for="rk-arnes-${id}">Solo Arnés</label></div>
+              </div>
+            </div>
+            <div class="rental-grid">
+              <div class="form-group">
+                <label>Duración</label>
+                <select id="durK-${id}">
+                  <option value="">Seleccionar</option>
+                  <option value="sesion">Sesión (≤3h)</option>
+                  <option value="dia1">1 Día</option>
+                  <option value="dias3">3+ Días / día</option>
+                  <option value="dias5">5+ Días / día</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Días</label><input type="number" id="diasK-${id}" min="1" value="1"></div>
+            </div>
+          </div>
+          <div id="renWing-${id}" class="hidden">
+            <div class="form-group">
+              <label>Equipo</label>
+              <div class="rental-checkboxes">
+                <div class="checkbox-container"><input type="checkbox" id="rw-comp-${id}" value="completo"><label for="rw-comp-${id}">Eq. Completo</label></div>
+                <div class="checkbox-container"><input type="checkbox" id="rw-wing-${id}" value="soloWing"><label for="rw-wing-${id}">Solo Wing</label></div>
+                <div class="checkbox-container"><input type="checkbox" id="rw-foil-${id}" value="tablaFoil"><label for="rw-foil-${id}">Tabla + Foil</label></div>
+              </div>
+            </div>
+            <div class="rental-grid">
+              <div class="form-group">
+                <label>Duración</label>
+                <select id="durW-${id}">
+                  <option value="">Seleccionar</option>
+                  <option value="hora">Por Hora</option>
+                  <option value="dia">Día Completo (3h)</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Días</label><input type="number" id="diasW-${id}" min="1" value="1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
+        <div class="section-title">Extras</div>
+        <div class="extras-list">
+          <div class="checkbox-container"><input type="checkbox" id="prot-${id}"><label for="prot-${id}" id="label-prot-${id}">Protector Solar (R$ ${precios.extras.protectorSolar})</label></div>
+          <div class="checkbox-container"><input type="checkbox" id="lyc-${id}"><label for="lyc-${id}" id="label-lyc-${id}">Lycras (R$ ${precios.extras.lycras})</label></div>
+          <div class="checkbox-container"><input type="checkbox" id="cuipe-${id}"><label for="cuipe-${id}" id="label-cuipe-${id}">Tarde en Cuipe (R$ ${precios.extras.cuipe})</label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="result-box">
+    <div class="result-box-header">Opción ${id}</div>
+    <div class="result-box-body">
+      <div class="result-item"><span>Subtotal</span><span id="subtotal-prev-${id}">R$ 0</span></div>
+      <div class="result-item descuento" id="desc-row-${id}" style="display:none"><span>Desc. Efectivo/Pix</span><span id="desc-prev-${id}">-R$ 0</span></div>
+      <div class="result-item total"><span>Total</span><span id="total-prev-${id}">R$ 0</span></div>
+    </div>
+  </div>
+  `;
+}
+
+function configurarEventos(id) {
+  document.querySelectorAll(`input[name="clases-${id}"]`).forEach(r => r.addEventListener('change', function() {
+    document.getElementById(`clasesOpc-${id}`).classList.toggle('hidden', this.value !== 'si');
+    actualizarPreview(id);
+  }));
+  document.querySelectorAll(`input[name="rental-${id}"]`).forEach(r => r.addEventListener('change', function() {
+    document.getElementById(`rentalOpc-${id}`).classList.toggle('hidden', this.value !== 'si');
+    actualizarPreview(id);
+  }));
+  document.querySelectorAll(`input[name="prod-${id}"]`).forEach(r => r.addEventListener('change', function() {
+    document.getElementById(`hrsClaseC-${id}`).style.display = (this.value === 'Hora suelta' || this.value === 'Avanzadas') ? 'block' : 'none';
+    actualizarPreview(id);
+  }));
+
+  const drEl = document.getElementById(`depR-${id}`);
+  if (drEl) drEl.addEventListener('change', function() {
+    document.getElementById(`renKite-${id}`).classList.add('hidden');
+    document.getElementById(`renWing-${id}`).classList.add('hidden');
+    if (this.value === 'Kite') document.getElementById(`renKite-${id}`).classList.remove('hidden');
+    else if (this.value === 'Wing') document.getElementById(`renWing-${id}`).classList.remove('hidden');
+    actualizarPreview(id);
+  });
+
+  document.querySelectorAll(`#option-${id} input, #option-${id} select`).forEach(el => {
+    el.addEventListener('change', () => actualizarPreview(id));
+    el.addEventListener('input', () => actualizarPreview(id));
+  });
+}
+
+
+function syncStickyTotal(id) {
+  const active = document.querySelector('.tab.active');
+  if (!active || parseInt(active.getAttribute('data-option'), 10) !== id) return;
+  const tot = document.getElementById('total-prev-' + id);
+  const sticky = document.getElementById('stickyTotal');
+  if (tot && sticky) sticky.textContent = tot.textContent;
+}
+
+function cambiarOpcion(id) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const tt = document.querySelector(`[data-option="${id}"]`);
+  if (tt) tt.classList.add('active');
+  document.querySelectorAll('.option-content').forEach(c => c.classList.remove('active'));
+  const tc = document.getElementById(`option-${id}`);
+  if (tc) tc.classList.add('active');
+  syncStickyTotal(id);
+}
+
+function eliminarOpcion(id) {
+  if (document.querySelectorAll('.tab').length <= 1) {alert('Mínimo 1 opción'); return;}
+  const t = document.querySelector(`[data-option="${id}"]`);
+  const c = document.getElementById(`option-${id}`);
+  if (t) t.remove();
+  if (c) c.remove();
+  const ft = document.querySelector('.tab');
+  if (ft) cambiarOpcion(parseInt(ft.getAttribute('data-option')));
+}
+
+function actualizarPreview(id) {
+  const d = obtenerDatosOpcion(id);
+  const sub = document.getElementById(`subtotal-prev-${id}`);
+  const tot = document.getElementById(`total-prev-${id}`);
+  const descRow = document.getElementById(`desc-row-${id}`);
+  const descPrev = document.getElementById(`desc-prev-${id}`);
+  if (!sub || !tot) return;
+
+  // Show huésped note
+  const tieneHab = !!document.querySelector(`input[name="hab-${id}"]:checked`)?.value;
+  const hn = document.getElementById(`huesp-note-${id}`);
+  if (hn) hn.style.display = tieneHab ? 'block' : 'none';
+
+  sub.textContent = `R$ ${d.grandTotal}`;
+  if (d.descuentoPago > 0) {
+    descRow.style.display = 'flex';
+    descPrev.textContent = `-R$ ${d.descuentoPago}`;
+    tot.textContent = `R$ ${d.totalFinal}`;
+  } else {
+    descRow.style.display = 'none';
+    tot.textContent = `R$ ${d.grandTotal}`;
+  }
+  syncStickyTotal(id);
+}
+
+function obtenerDatosOpcion(id) {
+  const temporada = document.querySelector(`input[name="temp-${id}"]:checked`)?.value || null;
+  const personas  = parseInt(document.getElementById(`pers-${id}`)?.value) || 1;
+  const habitacion = document.querySelector(`input[name="hab-${id}"]:checked`)?.value || null;
+  const noches    = parseInt(document.getElementById(`noches-${id}`)?.value) || 1;
+  const desayuno  = document.querySelector(`input[name="des-${id}"]:checked`)?.value || 'no';
+  const formaPago = document.querySelector(`input[name="pago-${id}"]:checked`)?.value || 'tarjeta';
+
+  const quiereClases = document.querySelector(`input[name="clases-${id}"]:checked`)?.value || 'no';
+  const deporte      = document.getElementById(`dep-${id}`)?.value || '';
+  const productoClase = document.querySelector(`input[name="prod-${id}"]:checked`)?.value || null;
+  const horasClase   = parseInt(document.getElementById(`hrs-${id}`)?.value) || 1;
+  const tieneHospedaje = !!habitacion;
+
+  const quiereRental = document.querySelector(`input[name="rental-${id}"]:checked`)?.value || 'no';
+  const deporteRental = document.getElementById(`depR-${id}`)?.value || '';
+  let duracionRental = '', diasRental = 1, rentalItems = [];
+
+  if (deporteRental === 'Kite') {
+    duracionRental = document.getElementById(`durK-${id}`)?.value || '';
+    diasRental = parseInt(document.getElementById(`diasK-${id}`)?.value) || 1;
+    if (document.getElementById(`rk-comp-${id}`)?.checked) rentalItems.push('completo');
+    if (document.getElementById(`rk-kite-${id}`)?.checked) rentalItems.push('soloKite');
+    if (document.getElementById(`rk-tabla-${id}`)?.checked) rentalItems.push('soloTabla');
+    if (document.getElementById(`rk-arnes-${id}`)?.checked) rentalItems.push('soloArnes');
+  } else if (deporteRental === 'Wing') {
+    duracionRental = document.getElementById(`durW-${id}`)?.value || '';
+    diasRental = parseInt(document.getElementById(`diasW-${id}`)?.value) || 1;
+    if (document.getElementById(`rw-comp-${id}`)?.checked) rentalItems.push('completo');
+    if (document.getElementById(`rw-wing-${id}`)?.checked) rentalItems.push('soloWing');
+    if (document.getElementById(`rw-foil-${id}`)?.checked) rentalItems.push('tablaFoil');
+  }
+
+  const protectorSolar = document.getElementById(`prot-${id}`)?.checked || false;
+  const lycras = document.getElementById(`lyc-${id}`)?.checked || false;
+  const cuipe  = document.getElementById(`cuipe-${id}`)?.checked || false;
+
+  const rH = calcularHospedaje({temporada,habitacion,noches,personas,desayuno}, precios);
+  const rC = calcularClases({quiereClases,deporte,productoClase,horasClase,temporada,tieneHospedaje}, precios);
+  const rR = calcularRental({quiereRental,deporteRental,duracionRental,diasRental,rentalItems}, precios);
+  const rE = calcularExtras({protectorSolar,lycras,cuipe}, precios);
+
+  const grandTotal = rH.total + rC.total + rR.total + rE.total;
+  const descuentoPago = formaPago === 'efectivo' ? Math.round(grandTotal * 0.1) : 0;
+  const totalFinal = grandTotal - descuentoPago;
+  const deposito30 = Math.round(totalFinal * 0.3);
+
+  return {temporada,personas,habitacion,noches,desayuno,formaPago,
+    hospedaje:rH, clases:rC, rental:rR, extras:rE,
+    grandTotal, descuentoPago, totalFinal, deposito30,
+    tieneServInd: rC.total > 0 || rR.total > 0 || rE.total > 0};
+}
+
+// ── Generar comparación ───────────────────────────────────────────────────────
+
+function generarComparacion() {
+  const nombre = document.getElementById('nombreLeadGlobal').value;
+  if (!nombre) {alert('Ingresa nombre del lead'); return;}
+  const ops = [];
+  document.querySelectorAll('.option-content').forEach(c => {
+    const id = parseInt(c.id.split('-')[1]);
+    const d = obtenerDatosOpcion(id);
+    if (d.grandTotal > 0) ops.push({id, data: d});
+  });
+  if (ops.length === 0) {alert('Completa al menos una opción'); return;}
+  crearMensajePT(nombre, ops);
+  crearMensajeES(nombre, ops);
+  crearMensajeEN(nombre, ops);
+  document.getElementById('resultadoComparador').classList.remove('hidden');
+  document.getElementById('resultadoComparador').scrollIntoView({behavior:'smooth'});
+}
+
+function fmtLine(item, lang) {
+  const uMap = {pt:{noches:'noites',horas:'horas',días:'dias',pack:'pack',un:'un'},es:{noches:'noches',horas:'horas',días:'días',pack:'pack',un:'un'},en:{noches:'nights',horas:'hours',días:'days',pack:'pack',un:'un'}};
+  const l = uMap[lang];
+  let ul = l[item.unit] || item.unit;
+  return `   • ${item.label}: ${item.qty} ${ul} × R$ ${item.unitPrice} = R$ ${item.subtotal}`;
+}
+
+const indNote = {
+  pt: `\n⚠️ *Nota:* Preço das aulas é por pessoa. Extras e rentals também são por pessoa.`,
+  es: `\n⚠️ *Nota:* Precio de clases es por persona. Extras y rentals también son por persona.`,
+  en: `\n⚠️ *Note:* Lesson price is per person. Extras and rentals are also per person.`
+};
+
+function crearMensajePT(nombre, ops) {
+  let m = `Olá ${nombre}! 👋\nMontei ${ops.length>1?'algumas opções':'uma proposta'} para Indiana Kite 🌬️\n\n━━━━━━━━━━━━━━━━━━━━\n`;
+  ops.forEach((op, i) => {
+    const d = op.data;
+    m += `\n✨ *OPÇÃO ${op.id}:*\n`;
+    if (d.hospedaje.items.length > 0) {
+      m += `\n🏠 *Hospedagem:*\n`;
+      d.hospedaje.items.forEach(it => m += fmtLine({...it,label:it.label.replace('Desayuno','Café da manhã')},'pt')+'\n');
+    }
+    if (d.clases.items.length > 0) {
+      m += `\n🪁 *Aulas:*\n`;
+      d.clases.items.forEach(it => m += fmtLine({...it,label:it.label.replace('Clase','Aula').replace('hora suelta','hora avulsa').replace('Avanzada','Avançada')},'pt')+'\n');
+    }
+    if (d.rental.items.length > 0) {
+      m += `\n🧰 *Rental:*\n`;
+      d.rental.items.forEach(it => m += fmtLine({...it,label:it.label.replace('Solo Tabla','Só Prancha').replace('Solo Arnés','Só Trapézio').replace('Eq. Completo','Equip. Completo')},'pt')+'\n');
+    }
+    if (d.extras.items.length > 0) {
+      m += `\n🛍️ *Extras:*\n`;
+      d.extras.items.forEach(it => m += fmtLine({...it,label:it.label.replace('Protector Solar','Protetor Solar').replace('Tarde en Cuipe','Tarde em Cuipe')},'pt')+'\n');
+    }
+    m += `\n💰 *Subtotal: R$ ${d.grandTotal}*`;
+    if (d.descuentoPago > 0) m += `\n💵 Desconto Pix: -R$ ${d.descuentoPago} → *R$ ${d.totalFinal}*`;
+    m += `\n📍 Sinal de 30%: R$ ${d.deposito30}`;
+    if (d.personas > 1 && d.tieneServInd) m += indNote.pt;
+    if (i < ops.length-1) m += `\n\n━━━━━━━━━━━━━━━━━━━━`;
+  });
+  m += `\n\n💳 *Formas de pagamento:*\n   • Cartão de crédito (preço normal)\n   • Pix / dinheiro (10% de desconto)\n\n📌 Sujeito a disponibilidade.\n\nMe conta o que você achou! 🤙`;
+  document.getElementById('mensajePT').textContent = m;
+}
+
+function crearMensajeES(nombre, ops) {
+  let m = `Hola ${nombre}! 👋\nTe armé ${ops.length>1?'varias opciones':'una propuesta'} para Indiana Kite 🌬️\n\n━━━━━━━━━━━━━━━━━━━━\n`;
+  ops.forEach((op, i) => {
+    const d = op.data;
+    m += `\n✨ *OPCIÓN ${op.id}:*\n`;
+    if (d.hospedaje.items.length > 0) {
+      m += `\n🏠 *Hospedaje:*\n`;
+      d.hospedaje.items.forEach(it => m += fmtLine(it,'es')+'\n');
+    }
+    if (d.clases.items.length > 0) {
+      m += `\n🪁 *Clases:*\n`;
+      d.clases.items.forEach(it => m += fmtLine(it,'es')+'\n');
+    }
+    if (d.rental.items.length > 0) {
+      m += `\n🧰 *Rental:*\n`;
+      d.rental.items.forEach(it => m += fmtLine(it,'es')+'\n');
+    }
+    if (d.extras.items.length > 0) {
+      m += `\n🛍️ *Extras:*\n`;
+      d.extras.items.forEach(it => m += fmtLine(it,'es')+'\n');
+    }
+    m += `\n💰 *Subtotal: R$ ${d.grandTotal}*`;
+    if (d.descuentoPago > 0) m += `\n💵 Descuento efectivo/Pix: -R$ ${d.descuentoPago} → *R$ ${d.totalFinal}*`;
+    m += `\n📍 Seña del 30%: R$ ${d.deposito30}`;
+    if (d.personas > 1 && d.tieneServInd) m += indNote.es;
+    if (i < ops.length-1) m += `\n\n━━━━━━━━━━━━━━━━━━━━`;
+  });
+  m += `\n\n💳 *Formas de pago:*\n   • Tarjeta de crédito (precio normal)\n   • Efectivo / Pix (10% de descuento)\n\n📌 Sujeto a disponibilidad.\n\n¡Contame qué te parece! 🤙`;
+  document.getElementById('mensajeES').textContent = m;
+}
+
+function crearMensajeEN(nombre, ops) {
+  let m = `Hi ${nombre}! 👋\nI put together ${ops.length>1?'some options':'a proposal'} for Indiana Kite 🌬️\n\n━━━━━━━━━━━━━━━━━━━━\n`;
+  ops.forEach((op, i) => {
+    const d = op.data;
+    m += `\n✨ *OPTION ${op.id}:*\n`;
+    if (d.hospedaje.items.length > 0) {
+      m += `\n🏠 *Accommodation:*\n`;
+      d.hospedaje.items.forEach(it => {
+        const label = it.label.replace('Compartida 8 (Aire)','Shared 8-bed (AC)').replace('Compartida Vent.','Shared Fan Room').replace('Compartida Aire (Fem)','Shared AC Room (Female)').replace('Privada s/Aire','Private no AC').replace('Privada c/Aire Suite','Private Suite (AC)').replace('Desayuno','Breakfast');
+        m += fmtLine({...it,label},'en')+'\n';
+      });
+    }
+    if (d.clases.items.length > 0) {
+      m += `\n🪁 *Lessons:*\n`;
+      d.clases.items.forEach(it => {
+        const label = it.label.replace('Clase','Lesson').replace('hora suelta','single hour').replace('Avanzada','Advanced');
+        m += fmtLine({...it,label},'en')+'\n';
+      });
+    }
+    if (d.rental.items.length > 0) {
+      m += `\n🧰 *Rental:*\n`;
+      d.rental.items.forEach(it => {
+        const label = it.label.replace('Eq. Completo','Full Equipment').replace('Solo Kite','Kite Only').replace('Solo Tabla','Board Only').replace('Solo Arnés','Harness Only').replace('Solo Wing','Wing Only').replace('Tabla+Foil','Board+Foil');
+        m += fmtLine({...it,label},'en')+'\n';
+      });
+    }
+    if (d.extras.items.length > 0) {
+      m += `\n🛍️ *Extras:*\n`;
+      d.extras.items.forEach(it => {
+        const label = it.label.replace('Protector Solar','Sunscreen').replace('Tarde en Cuipe','BBQ at Cuipe');
+        m += fmtLine({...it,label},'en')+'\n';
+      });
+    }
+    m += `\n💰 *Subtotal: R$ ${d.grandTotal}*`;
+    if (d.descuentoPago > 0) m += `\n💵 Cash/Pix discount: -R$ ${d.descuentoPago} → *R$ ${d.totalFinal}*`;
+    m += `\n📍 30% deposit to confirm: R$ ${d.deposito30}`;
+    if (d.personas > 1 && d.tieneServInd) m += indNote.en;
+    if (i < ops.length-1) m += `\n\n━━━━━━━━━━━━━━━━━━━━`;
+  });
+  m += `\n\n💳 *Payment options:*\n   • Credit card (full price)\n   • Cash / Pix (10% discount)\n\n📌 Subject to availability.\n\nLet me know what you think! 🤙`;
+  document.getElementById('mensajeEN').textContent = m;
+}
+
+function cambiarIdioma(lang) {
+  currentLanguage = lang;
+  document.querySelectorAll('.language-tab').forEach(t => { t.classList.remove('active'); if(t.getAttribute('data-lang')===lang) t.classList.add('active'); });
+  document.querySelectorAll('.whatsapp-message').forEach(m => m.classList.remove('active'));
+  document.getElementById(`mensaje${lang.toUpperCase()}`).classList.add('active');
+}
+
+function copiarMensaje() {
+  const m = document.getElementById(`mensaje${currentLanguage.toUpperCase()}`).textContent;
+  navigator.clipboard.writeText(m).then(() => {
+    const b = document.getElementById('copiarBtn');
+    b.textContent = '✓ Copiado!';
+    setTimeout(() => { b.textContent = 'Copiar mensaje'; }, 2000);
+  });
+}
+
+// ── Precios / Settings ────────────────────────────────────────────────────────
+
+function sincronizarInputsPrecios() {
+  const l = precios.lodging;
+  const sMap = {LOW:'LOW',MID:'MID',HIGH:'HIGH',AÑONUEVO:'AN'};
+  ['LOW','MID','HIGH','AÑONUEVO'].forEach(s => {
+    const k = sMap[s];
+    document.getElementById(`p-comp8-${k}`).value = l.compartida8[s];
+    document.getElementById(`p-compV-${k}`).value = l.compartidaVent[s];
+    document.getElementById(`p-compA-${k}`).value = l.compartidaAire[s];
+    for (let p=1;p<=3;p++) {
+      document.getElementById(`p-pSA-${p}-${k}`).value = l.privadaSinAire[p][s];
+      document.getElementById(`p-pCA-${p}-${k}`).value = l.privadaConAire[p][s];
+    }
+  });
+  document.getElementById('p-desayuno').value = l.desayuno;
+  const kh = precios.school.kite.horaSuelta;
+  document.getElementById('p-kite-MID-h').value = kh.MID.h;
+  document.getElementById('p-kite-MID-nh').value = kh.MID.nh;
+  document.getElementById('p-kite-HIGH-h').value = kh.HIGH.h;
+  document.getElementById('p-kite-HIGH-nh').value = kh.HIGH.nh;
+  const wh = precios.school.wing.horaSuelta;
+  document.getElementById('p-wing-h').value = wh.MID.h;
+  document.getElementById('p-wing-nh').value = wh.MID.nh;
+  const rk = precios.school.kite.rental;
+  document.getElementById('p-rk-comp-s').value = rk.completo.sesion;
+  document.getElementById('p-rk-comp-d1').value = rk.completo.dia1;
+  document.getElementById('p-rk-comp-d3').value = rk.completo.dias3;
+  document.getElementById('p-rk-comp-d5').value = rk.completo.dias5;
+  document.getElementById('p-rk-kite-s').value = rk.soloKite.sesion;
+  document.getElementById('p-rk-kite-d1').value = rk.soloKite.dia1;
+  document.getElementById('p-rk-kite-d3').value = rk.soloKite.dias3;
+  document.getElementById('p-rk-kite-d5').value = rk.soloKite.dias5;
+  document.getElementById('p-rk-tabla-s').value = rk.soloTabla.sesion;
+  document.getElementById('p-rk-tabla-d1').value = rk.soloTabla.dia1;
+  document.getElementById('p-rk-tabla-d3').value = rk.soloTabla.dias3;
+  document.getElementById('p-rk-tabla-d5').value = rk.soloTabla.dias5;
+  document.getElementById('p-rk-arnes-s').value = rk.soloArnes.sesion;
+  document.getElementById('p-rk-arnes-d1').value = rk.soloArnes.dia1;
+  document.getElementById('p-rk-arnes-d3').value = rk.soloArnes.dias3;
+  document.getElementById('p-rk-arnes-d5').value = rk.soloArnes.dias5;
+  const rw = precios.school.wing.rental;
+  document.getElementById('p-rw-comp-h').value = rw.completo.hora;
+  document.getElementById('p-rw-comp-d').value = rw.completo.dia;
+  document.getElementById('p-rw-wing-h').value = rw.soloWing.hora;
+  document.getElementById('p-rw-wing-d').value = rw.soloWing.dia;
+  document.getElementById('p-rw-foil-h').value = rw.tablaFoil.hora;
+  document.getElementById('p-rw-foil-d').value = rw.tablaFoil.dia;
+  document.getElementById('p-protector').value = precios.extras.protectorSolar;
+  document.getElementById('p-lycras').value = precios.extras.lycras;
+  document.getElementById('p-cuipe').value = precios.extras.cuipe;
+}
+
+function leerInt(id) { return parseInt(document.getElementById(id)?.value) || 0; }
+
+function guardarPrecios() {
+  const l = precios.lodging;
+  const sMap = {LOW:'LOW',MID:'MID',HIGH:'HIGH',AÑONUEVO:'AN'};
+  ['LOW','MID','HIGH','AÑONUEVO'].forEach(s => {
+    const k = sMap[s];
+    l.compartida8[s]    = leerInt(`p-comp8-${k}`);
+    l.compartidaVent[s] = leerInt(`p-compV-${k}`);
+    l.compartidaAire[s] = leerInt(`p-compA-${k}`);
+    for (let p=1;p<=3;p++) {
+      l.privadaSinAire[p][s] = leerInt(`p-pSA-${p}-${k}`);
+      l.privadaConAire[p][s] = leerInt(`p-pCA-${p}-${k}`);
+    }
+  });
+  l.desayuno = leerInt('p-desayuno');
+  const kh = precios.school.kite.horaSuelta;
+  kh.MID.h = leerInt('p-kite-MID-h'); kh.MID.nh = leerInt('p-kite-MID-nh');
+  kh.HIGH.h = leerInt('p-kite-HIGH-h'); kh.HIGH.nh = leerInt('p-kite-HIGH-nh');
+  precios.school.kite.pack10h.MID.h = Math.round(kh.MID.h * 10 * 0.96);
+  precios.school.kite.pack10h.MID.nh = Math.round(kh.MID.nh * 10 * 0.96);
+  precios.school.kite.pack10h.HIGH.h = Math.round(kh.HIGH.h * 10 * 0.96);
+  precios.school.kite.pack10h.HIGH.nh = Math.round(kh.HIGH.nh * 10 * 0.96);
+  const wh = precios.school.wing.horaSuelta;
+  const wHVal = leerInt('p-wing-h'), wNhVal = leerInt('p-wing-nh');
+  wh.MID.h = wHVal; wh.MID.nh = wNhVal; wh.HIGH.h = wHVal; wh.HIGH.nh = wNhVal;
+  precios.school.wing.pack10h.MID.h = Math.round(wHVal*10*0.93);
+  precios.school.wing.pack10h.MID.nh = Math.round(wNhVal*10*0.93);
+  precios.school.wing.pack10h.HIGH.h = Math.round(wHVal*10*0.93);
+  precios.school.wing.pack10h.HIGH.nh = Math.round(wNhVal*10*0.93);
+  const rk = precios.school.kite.rental;
+  rk.completo.sesion = leerInt('p-rk-comp-s'); rk.completo.dia1 = leerInt('p-rk-comp-d1');
+  rk.completo.dias3 = leerInt('p-rk-comp-d3'); rk.completo.dias5 = leerInt('p-rk-comp-d5');
+  rk.soloKite.sesion = leerInt('p-rk-kite-s'); rk.soloKite.dia1 = leerInt('p-rk-kite-d1');
+  rk.soloKite.dias3 = leerInt('p-rk-kite-d3'); rk.soloKite.dias5 = leerInt('p-rk-kite-d5');
+  rk.soloTabla.sesion = leerInt('p-rk-tabla-s'); rk.soloTabla.dia1 = leerInt('p-rk-tabla-d1');
+  rk.soloTabla.dias3 = leerInt('p-rk-tabla-d3'); rk.soloTabla.dias5 = leerInt('p-rk-tabla-d5');
+  rk.soloArnes.sesion = leerInt('p-rk-arnes-s'); rk.soloArnes.dia1 = leerInt('p-rk-arnes-d1');
+  rk.soloArnes.dias3 = leerInt('p-rk-arnes-d3'); rk.soloArnes.dias5 = leerInt('p-rk-arnes-d5');
+  const rw = precios.school.wing.rental;
+  rw.completo.hora = leerInt('p-rw-comp-h'); rw.completo.dia = leerInt('p-rw-comp-d');
+  rw.soloWing.hora = leerInt('p-rw-wing-h'); rw.soloWing.dia = leerInt('p-rw-wing-d');
+  rw.tablaFoil.hora = leerInt('p-rw-foil-h'); rw.tablaFoil.dia = leerInt('p-rw-foil-d');
+  precios.extras.protectorSolar = leerInt('p-protector');
+  precios.extras.lycras = leerInt('p-lycras');
+  precios.extras.cuipe = leerInt('p-cuipe');
+  precios.version = PRECIO_VERSION;
+  localStorage.setItem('indianaKitePrecios', JSON.stringify(precios));
+  const btn = document.getElementById('guardarPreciosBtn');
+  btn.textContent = '✓ Guardado!';
+  setTimeout(() => { btn.textContent = '💾 Guardar'; }, 2000);
+}
+
+function cargarPreciosGuardados() {
+  const g = localStorage.getItem('indianaKitePrecios');
+  if (g) {
+    const saved = JSON.parse(g);
+    if (saved.version === PRECIO_VERSION) deepMerge(precios, saved);
+    // versión antigua: ignorar y usar defaults 2026
+  }
+}
+
+function deepMerge(t, s) {
+  for (const k in s) {
+    if (s[k] && typeof s[k] === 'object' && !Array.isArray(s[k])) {
+      if (!t[k]) t[k] = {};
+      deepMerge(t[k], s[k]);
+    } else {
+      t[k] = s[k];
+    }
+  }
+}
+
+function resetearPrecios() {
+  if (confirm('¿Restaurar precios 2026 originales?')) {
+    precios = JSON.parse(JSON.stringify(preciosDefault));
+    localStorage.removeItem('indianaKitePrecios');
+    sincronizarInputsPrecios();
+  }
+}
+</script>
 </body>
 </html>
